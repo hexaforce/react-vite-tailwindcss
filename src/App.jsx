@@ -6,20 +6,20 @@ import { navigation } from '@/navigation'
 function App() {
   const { pathname } = useLocation()
   return (
-    <MainLayout pathname={pathname} title={navigation.find((nav) => nav.path === pathname).name}>
+    <MainLayout pathname={pathname} title={navigation.find((nav) => nav.path === pathname)?.name ?? ''}>
       <Routes>
         {navigation.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
         <Route path='*' element={<Navigate to='/description' replace />} />
       </Routes>
     </MainLayout>
     // <PublicLayout pathname={pathname} title={navigation.find((nav) => nav.path === pathname)?.name ?? ''}>
-    //   {/*
+    //   {/*       
     //   <Routes>
     //     {navigation.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
     //     <Route path='*' element={<Navigate to='/description' replace />} />
     //   </Routes> 
     //   */}
-    //   <div className='mx-auto max-w-2xl py-32 sm:py-48 lg:py-56'>
+    //   {/* <div className='mx-auto max-w-2xl py-32 sm:py-48 lg:py-56'>
     //     <div className='hidden sm:mb-8 sm:flex sm:justify-center'>
     //       <div className='relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
     //         Announcing our next round of funding.
@@ -41,7 +41,7 @@ function App() {
     //         </a>
     //       </div>
     //     </div>
-    //   </div>
+    //   </div> */}
     // </PublicLayout>
   )
 }
