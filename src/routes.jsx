@@ -1,4 +1,4 @@
-import { Description, Stacked } from '@/views'
+import { Description, Stacked, Form } from '@/views'
 
 export const routes = [
     {
@@ -11,5 +11,9 @@ export const routes = [
       path: '/stacked',
       element: <Stacked />,
     },
+    {
+      name: 'form',
+      path: '/form',
+      element: <Form />,
+    },
   ]
-  

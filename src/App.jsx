@@ -5,8 +5,7 @@ import { routes } from '@/routes'
 function App() {
   const { pathname } = useLocation()
   return (
-    <MainLayout>
-      <h1>{pathname}</h1>
+    <MainLayout pathname={pathname}>
       <Routes>
         {routes.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
         <Route path='*' element={<Navigate to='/description' replace />} />
