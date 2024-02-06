@@ -6,12 +6,16 @@ import { Link } from 'react-router-dom'
 import { navigation } from '@/navigation'
 
 PublicLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-  pathname: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  currentNav: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    element: PropTypes.element.isRequired,
+    layout: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
-export function PublicLayout({ children, pathname, title }) {
+export function PublicLayout({ children, currentNav }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (

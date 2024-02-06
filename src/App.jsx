@@ -6,26 +6,33 @@ import { navigation } from '@/navigation'
 
 function App() {
   const { pathname } = useLocation()
+  const currentNav = navigation.find((nav) => nav.path === pathname)
+
+  let layout;
+
+  switch (currentNav?.layout) {
+    case 'main':
+      layout = <MainLayout currentNav={currentNav} />;
+      break;
+    case 'public':
+      layout = <PublicLayout currentNav={currentNav} />;
+      break;
+    case 'sub':
+      layout = <SubLayout currentNav={currentNav} />;
+      break;
+    default:
+      layout = <MainLayout currentNav={currentNav} />;
+  }
+
   return (
-    // <MainLayout pathname={pathname} title={navigation.find((nav) => nav.path === pathname)?.name ?? ''}>
-    //   <Routes>
-    //     {navigation.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
-    //     <Route path='*' element={<Navigate to='/description' replace />} />
-    //   </Routes>
-    // </MainLayout>
-    // <PublicLayout pathname={pathname} title={navigation.find((nav) => nav.path === pathname)?.name ?? ''}>
-    //   <Routes>
-    //     {navigation.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
-    //     <Route path='*' element={<Navigate to='/description' replace />} />
-    //   </Routes>
-    // </PublicLayout>
-    <SubLayout pathname={pathname} title={navigation.find((nav) => nav.path === pathname)?.name ?? ''}>
+    <>
+      {layout}
       <Routes>
         {navigation.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
         <Route path='*' element={<Navigate to='/description' replace />} />
       </Routes>
-    </SubLayout>
+    </>
   )
 }
 
-export default App
+export default App;

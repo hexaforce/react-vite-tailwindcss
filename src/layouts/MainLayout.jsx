@@ -13,12 +13,16 @@ const user = {
 }
 
 MainLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-  pathname: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  currentNav: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    element: PropTypes.element.isRequired,
+    layout: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
-export function MainLayout({ children, pathname, title }) {
+export function MainLayout({ children, currentNav }) {
   return (
     <>
       <div className='min-h-full'>
@@ -34,7 +38,7 @@ export function MainLayout({ children, pathname, title }) {
                     <div className='hidden md:block'>
                       <div className='ml-10 flex items-baseline space-x-4'>
                         {navigation.map((item) => (
-                          <Link key={item.name} to={item.path} className={classNames(item.path === pathname ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium')} aria-current={item.current ? 'page' : undefined}>
+                          <Link key={item.name} to={item.path} className={classNames(item.path === currentNav.path ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium')} aria-current={item.current ? 'page' : undefined}>
                             {item.name}
                           </Link>
                         ))}
@@ -88,7 +92,7 @@ export function MainLayout({ children, pathname, title }) {
               <Disclosure.Panel className='md:hidden'>
                 <div className='space-y-1 px-2 pb-3 pt-2 sm:px-3'>
                   {navigation.map((item) => (
-                    <Disclosure.Button key={item.name} as='a' href={item.path} className={classNames(item.path === pathname ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium')} aria-current={item.current ? 'page' : undefined}>
+                    <Disclosure.Button key={item.name} as='a' href={item.path} className={classNames(item.path === currentNav.path ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium')} aria-current={item.current ? 'page' : undefined}>
                       {item.name}
                     </Disclosure.Button>
                   ))}
@@ -123,7 +127,7 @@ export function MainLayout({ children, pathname, title }) {
 
         <header className='bg-white shadow'>
           <div className='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
-            <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{title}</h1>
+            <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{currentNav?.name}</h1>
           </div>
         </header>
         <main>

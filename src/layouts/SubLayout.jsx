@@ -7,12 +7,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { navigation, userNavigation } from '@/navigation'
 
-SubLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-  pathname: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-}
-
 const products = [
   { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
   { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
@@ -26,7 +20,17 @@ const callsToAction = [
   { name: 'Contact sales', href: '#', icon: PhoneIcon },
 ]
 
-export function SubLayout({ children, pathname, title }) {
+SubLayout.propTypes = {
+  children: PropTypes.node,
+  currentNav: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    element: PropTypes.element.isRequired,
+    layout: PropTypes.string.isRequired,
+  }).isRequired,
+}
+
+export function SubLayout({ children, currentNav }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (

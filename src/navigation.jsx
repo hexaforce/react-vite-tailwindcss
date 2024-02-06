@@ -5,31 +5,37 @@ export const navigation = [
     name: 'Description',
     path: '/description',
     element: <Description />,
+    layout: "main",
   },
   {
     name: 'Stacked',
     path: '/stacked',
     element: <Stacked />,
+    layout: "public",
   },
   {
     name: 'Form',
     path: '/form',
     element: <Form />,
+    layout: "public",
   },
   {
     name: 'Top',
     path: '/top',
     element: <Top />,
+    layout: "sub",
   },
   {
     name: 'Contact',
     path: '/contact',
     element: <Contact />,
+    layout: "sub",
   },
   {
     name: 'Map',
     path: '/map',
     element: <Map />,
+    layout: "main",
   },
 ]
 
