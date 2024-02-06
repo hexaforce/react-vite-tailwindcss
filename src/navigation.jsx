@@ -1,4 +1,4 @@
-import { Description, Stacked, Form, Top, Contact } from '@/views'
+import { Description, Stacked, Form, Top, Contact, Map } from '@/views'
 
 export const navigation = [
   {
@@ -25,6 +25,11 @@ export const navigation = [
     name: 'Contact',
     path: '/contact',
     element: <Contact />,
+  },
+  {
+    name: 'Map',
+    path: '/map',
+    element: <Map />,
   },
 ]
 

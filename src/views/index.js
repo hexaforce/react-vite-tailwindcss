@@ -4,3 +4,4 @@ export * from '@/views/Form'
 
 export * from '@/views/Top'
 export * from '@/views/Contact'
+export * from '@/views/Map'
