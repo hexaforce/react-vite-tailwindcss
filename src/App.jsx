@@ -21,7 +21,7 @@ function App() {
       layout = <SubLayout currentNav={currentNav} />;
       break;
     default:
-      layout = <MainLayout currentNav={currentNav} />;
+      layout = <></>;
   }
 
   return (

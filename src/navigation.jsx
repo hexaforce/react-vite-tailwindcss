@@ -1,41 +1,63 @@
-import { Description, Stacked, Form, Top, Contact, Map } from '@/views'
+import { Description, Stacked, Form, Top, Contact, Map, SignIn, NotFound, Slide } from '@/views'
+
+// const layout = "main"
+const layout = "public"
+// const layout = "sub"
 
 export const navigation = [
   {
     name: 'Description',
     path: '/description',
     element: <Description />,
-    layout: "main",
+    layout: layout,
   },
   {
     name: 'Stacked',
     path: '/stacked',
     element: <Stacked />,
-    layout: "public",
+    layout: layout,
   },
   {
     name: 'Form',
     path: '/form',
     element: <Form />,
-    layout: "public",
+    layout: layout,
   },
   {
     name: 'Top',
     path: '/top',
     element: <Top />,
-    layout: "sub",
+    layout: layout,
   },
   {
     name: 'Contact',
     path: '/contact',
     element: <Contact />,
-    layout: "sub",
+    layout: layout,
   },
   {
     name: 'Map',
     path: '/map',
     element: <Map />,
-    layout: "main",
+    layout: layout,
+  },
+  {
+    name: 'SignIn',
+    path: '/sign-in',
+    element: <SignIn />,
+    layout: "none",
+  },
+  {
+    name: '404',
+    path: '/404',
+    element: <NotFound />,
+    layout: "none",
+  },
+  {
+    name: 'Slide',
+    path: '/slide',
+    element: <Slide />,
+    layout: "none",
   },
 ]
 

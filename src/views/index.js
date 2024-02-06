@@ -5,3 +5,7 @@ export * from '@/views/Form'
 export * from '@/views/Top'
 export * from '@/views/Contact'
 export * from '@/views/Map'
+
+export * from '@/views/SignIn'
+export * from '@/views/NotFound'
+export * from '@/views/Slide'
