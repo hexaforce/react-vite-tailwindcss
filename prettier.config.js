@@ -1,6 +1,10 @@
-import tailwindcss from 'prettier-plugin-tailwindcss'
+// import tailwindcss from 'prettier-plugin-tailwindcss'
+
+// module.exports = {
+//   tailwindConfig: './tailwind.config.js',
+//   plugins: [tailwindcss],
+// }
 
 module.exports = {
-  tailwindConfig: './tailwind.config.js',
-  plugins: [tailwindcss],
+  plugins: ['prettier-plugin-tailwindcss'],
 }

@@ -1,8 +1,8 @@
 import { Description, Stacked, Form, Top, Contact, Map, SignIn, NotFound, Slide } from '@/views'
 
 // const layout = "main"
-const layout = "public"
-// const layout = "sub"
+// const layout = "public"
+const layout = 'sub'
 
 export const navigation = [
   {
@@ -45,19 +45,19 @@ export const navigation = [
     name: 'SignIn',
     path: '/sign-in',
     element: <SignIn />,
-    layout: "none",
+    layout: 'none',
   },
   {
     name: '404',
     path: '/404',
     element: <NotFound />,
-    layout: "none",
+    layout: 'none',
   },
   {
     name: 'Slide',
     path: '/slide',
     element: <Slide />,
-    layout: "none",
+    layout: 'none',
   },
 ]
 

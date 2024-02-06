@@ -8,20 +8,20 @@ function App() {
   const { pathname } = useLocation()
   const currentNav = navigation.find((nav) => nav.path === pathname)
 
-  let layout;
+  let layout
 
   switch (currentNav?.layout) {
     case 'main':
-      layout = <MainLayout currentNav={currentNav} />;
-      break;
+      layout = <MainLayout currentNav={currentNav} />
+      break
     case 'public':
-      layout = <PublicLayout currentNav={currentNav} />;
-      break;
+      layout = <PublicLayout currentNav={currentNav} />
+      break
     case 'sub':
-      layout = <SubLayout currentNav={currentNav} />;
-      break;
+      layout = <SubLayout currentNav={currentNav} />
+      break
     default:
-      layout = <></>;
+      layout = <></>
   }
 
   return (
@@ -35,4 +35,4 @@ function App() {
   )
 }
 
-export default App;
+export default App
