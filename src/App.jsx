@@ -8,30 +8,29 @@ function App() {
   const { pathname } = useLocation()
   const currentNav = navigation.find((nav) => nav.path === pathname)
 
-  let layout
+  // let layout
 
-  switch (currentNav?.layout) {
-    case 'main':
-      layout = <MainLayout currentNav={currentNav} />
-      break
-    case 'public':
-      layout = <PublicLayout currentNav={currentNav} />
-      break
-    case 'sub':
-      layout = <SubLayout currentNav={currentNav} />
-      break
-    default:
-      layout = <></>
-  }
+  // switch (currentNav?.layout) {
+  //   case 'main':
+  //     layout = <MainLayout currentNav={currentNav} />
+  //     break
+  //   case 'public':
+  //     layout = <PublicLayout currentNav={currentNav} />
+  //     break
+  //   case 'sub':
+  //     layout = <SubLayout currentNav={currentNav} />
+  //     break
+  //   default:
+  //     layout = <></>
+  // }
 
   return (
-    <>
-      {layout}
+    <MainLayout currentNav={currentNav}>
       <Routes>
         {navigation.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
         <Route path='*' element={<Navigate to='/description' replace />} />
       </Routes>
-    </>
+    </MainLayout>
   )
 }
 
