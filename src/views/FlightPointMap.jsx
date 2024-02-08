@@ -2,34 +2,14 @@ import { Fragment } from 'react'
 import { BriefcaseIcon, CalendarIcon, CheckIcon, ChevronDownIcon, CurrencyDollarIcon, LinkIcon, MapPinIcon, PencilIcon } from '@heroicons/react/20/solid'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@/utile'
-import Map, { Marker } from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import MapBox from '@/components/mapbox-gl'
 
-function Root() {
-  return (
-    <Map
-      initialViewState={{
-        latitude: 35.7030639,
-        longitude: 139.7690916,
-        zoom: 16,
-      }}
-      style={{ width: 800, height: 600 }}
-      // style={{ width: '100%', height: '100%' }}
-      mapStyle='mapbox://styles/mapbox/streets-v9'
-      // mapStyle='mapbox://styles/mapbox/satellite-v9'
-      mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
-    >
-      <Marker latitude={35.7} longitude={139.7} color='red' />
-    </Map>
-  )
-}
-
-export function MainMap() {
+export function FlightPointMap() {
   return (
     <div className='bg-white px-4 lg:px-0'>
       <div className='lg:flex lg:items-center lg:justify-between'>
         <div className='min-w-0 flex-1'>
-          <h2 className='text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight'>Back End Developer</h2>
+          <h2 className='text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight'>Acn秋葉原ビル</h2>
           <div className='mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6'>
             <div className='mt-2 flex items-center text-sm text-gray-500'>
               <BriefcaseIcon className='mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400' aria-hidden='true' />
@@ -49,7 +29,7 @@ export function MainMap() {
             </div>
           </div>
         </div>
-        <div className='mt-5 flex lg:ml-4 lg:mt-0'>
+        <div className='mt-3 flex lg:ml-4 lg:mt-0'>
           <span className='hidden sm:block'>
             <button type='button' className='inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'>
               <PencilIcon className='-ml-0.5 mr-1.5 h-5 w-5 text-gray-400' aria-hidden='true' />
@@ -98,6 +78,9 @@ export function MainMap() {
             </Transition>
           </Menu>
         </div>
+      </div>
+      <div className='mx-auto max-w-7xl py-3'>
+        <MapBox />
       </div>
     </div>
   )

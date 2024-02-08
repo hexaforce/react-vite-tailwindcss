@@ -1,63 +1,68 @@
-import { Description, Stacked, Form, Top, Contact, MainMap, SignIn, NotFound, Slide } from '@/views'
+import { Description, Stacked, Form, Top, Contact, FlightPointMap, SignIn, NotFound, Slide } from '@/views'
 
-const layout = "main"
-// const layout = "public"
-// const layout = 'sub'
+const subLayout = 'header'
+
+export const findNavigation = (pathname) => {
+  if (pathname === '/'){
+    return navigation.find((nav) => nav.path === '/map')
+  }
+  return navigation.find((nav) => nav.path === pathname)
+}
 
 export const navigation = [
+  {
+    name: 'FlightPoint',
+    path: '/map',
+    element: <FlightPointMap />,
+    subLayout: 'none',
+  },
   {
     name: 'Description',
     path: '/description',
     element: <Description />,
-    layout: layout,
+    subLayout: subLayout,
   },
   {
     name: 'Stacked',
     path: '/stacked',
     element: <Stacked />,
-    layout: layout,
+    subLayout: subLayout,
   },
   {
     name: 'Form',
     path: '/form',
     element: <Form />,
-    layout: layout,
+    subLayout: subLayout,
   },
   {
     name: 'Top',
     path: '/top',
     element: <Top />,
-    layout: layout,
+    subLayout: subLayout,
   },
   {
     name: 'Contact',
     path: '/contact',
     element: <Contact />,
-    layout: layout,
-  },
-  {
-    name: 'Map',
-    path: '/map',
-    element: <MainMap />,
-    layout: layout,
+    subLayout: subLayout,
   },
   {
     name: 'SignIn',
     path: '/sign-in',
     element: <SignIn />,
-    layout: 'none',
+    subLayout: 'none',
   },
   {
     name: '404',
     path: '/404',
     element: <NotFound />,
-    layout: 'none',
+    subLayout: 'none',
   },
   {
     name: 'Slide',
     path: '/slide',
     element: <Slide />,
-    layout: 'none',
+    subLayout: 'none',
   },
 ]
 

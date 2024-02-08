@@ -1,10 +1,11 @@
 import { MainLayout } from '@/layouts/MainLayout'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { navigation } from '@/navigation'
+import { findNavigation, navigation } from '@/navigation'
+
 
 function App() {
   const { pathname } = useLocation()
-  const currentNav = navigation.find((nav) => nav.path === pathname)
+  const currentNav = findNavigation(pathname)
 
   // let layout
 
@@ -26,7 +27,8 @@ function App() {
     <MainLayout currentNav={currentNav}>
       <Routes>
         {navigation.map(({ path, element }, key) => element && <Route key={key} exact path={path} element={element} />)}
-        <Route path='*' element={<Navigate to='/description' replace />} />
+        <Route path='/' element={<Navigate to='/map' replace />} />
+        <Route path='*' element={<Navigate to='/404' replace />} />
       </Routes>
     </MainLayout>
   )
