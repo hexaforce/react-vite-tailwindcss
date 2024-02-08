@@ -2,8 +2,29 @@ import { Fragment } from 'react'
 import { BriefcaseIcon, CalendarIcon, CheckIcon, ChevronDownIcon, CurrencyDollarIcon, LinkIcon, MapPinIcon, PencilIcon } from '@heroicons/react/20/solid'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@/utile'
+import Map, { Marker } from 'react-map-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
 
-export function Map() {
+function Root() {
+  return (
+    <Map
+      initialViewState={{
+        latitude: 35.7030639,
+        longitude: 139.7690916,
+        zoom: 16,
+      }}
+      style={{ width: 800, height: 600 }}
+      // style={{ width: '100%', height: '100%' }}
+      mapStyle='mapbox://styles/mapbox/streets-v9'
+      // mapStyle='mapbox://styles/mapbox/satellite-v9'
+      mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
+    >
+      <Marker latitude={35.7} longitude={139.7} color='red' />
+    </Map>
+  )
+}
+
+export function MainMap() {
   return (
     <div className='lg:flex lg:items-center lg:justify-between'>
       <div className='min-w-0 flex-1'>
@@ -48,6 +69,7 @@ export function Map() {
             Publish
           </button>
         </span>
+
 
         {/* Dropdown */}
         <Menu as='div' className='relative ml-3 sm:hidden'>

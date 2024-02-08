@@ -6,6 +6,29 @@ import { classNames } from '@/utile'
 import { Link } from 'react-router-dom'
 import { navigation, userNavigation } from '@/navigation'
 
+
+// import Map, { Marker } from 'react-map-gl'
+// import 'mapbox-gl/dist/mapbox-gl.css'
+
+// function Root() {
+//   return (
+//     <Map
+//       initialViewState={{
+//         latitude: 35.7030639,
+//         longitude: 139.7690916,
+//         zoom: 16,
+//       }}
+//       style={{ width: 800, height: 600 }}
+//       // style={{ width: '100%', height: '100%' }}
+//       mapStyle='mapbox://styles/mapbox/streets-v9'
+//       // mapStyle='mapbox://styles/mapbox/satellite-v9'
+//       mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
+//     >
+//       <Marker latitude={35.7} longitude={139.7} color='red' />
+//     </Map>
+//   )
+// }
+
 const user = {
   name: 'Tom Cook',
   email: 'tom@example.com',
@@ -124,15 +147,20 @@ export function MainLayout({ children, currentNav }) {
             </>
           )}
         </Disclosure>
-
         <header className='bg-white shadow'>
           <div className='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
             <h1 className='text-3xl font-bold tracking-tight text-gray-900'>{currentNav?.name}</h1>
           </div>
         </header>
+{/* 
+
         <main>
-          <div className='mx-auto max-w-7xl py-6 sm:px-6 lg:px-8'>{children}</div>
-        </main>
+          <div className='mx-auto max-w-7xl py-6 sm:px-6 lg:px-8'>
+            {children}
+            <Root />
+          </div>
+        </main> */}
+
       </div>
     </>
   )

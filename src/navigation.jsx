@@ -1,4 +1,4 @@
-import { Description, Stacked, Form, Top, Contact, Map, SignIn, NotFound, Slide } from '@/views'
+import { Description, Stacked, Form, Top, Contact, MainMap, SignIn, NotFound, Slide } from '@/views'
 
 const layout = "main"
 // const layout = "public"
@@ -38,7 +38,7 @@ export const navigation = [
   {
     name: 'Map',
     path: '/map',
-    element: <Map />,
+    element: <MainMap />,
     layout: layout,
   },
   {
