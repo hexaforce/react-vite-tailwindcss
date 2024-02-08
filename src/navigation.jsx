@@ -1,8 +1,8 @@
 import { Description, Stacked, Form, Top, Contact, Map, SignIn, NotFound, Slide } from '@/views'
 
-// const layout = "main"
+const layout = "main"
 // const layout = "public"
-const layout = 'sub'
+// const layout = 'sub'
 
 export const navigation = [
   {
