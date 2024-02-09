@@ -1,4 +1,4 @@
-import { Description, Stacked, Form, Top, Contact, FlightPointMap, SignIn, NotFound, Slide } from '@/views'
+import { Description, Stacked, Form, Top, Contact, FlightPointMap,MediaLibrary, SignIn, NotFound, Slide } from '@/views'
 
 const subLayout = 'header'
 
@@ -14,6 +14,12 @@ export const navigation = [
     name: 'FlightPoint',
     path: '/map',
     element: <FlightPointMap />,
+    subLayout: 'none',
+  },
+  {
+    name: 'MediaLibrary',
+    path: '/media',
+    element: <MediaLibrary />,
     subLayout: 'none',
   },
   {

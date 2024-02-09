@@ -5,6 +5,7 @@ export * from '@/views/Form'
 export * from '@/views/Top'
 export * from '@/views/Contact'
 export * from '@/views/FlightPointMap'
+export * from '@/views/MediaLibrary'
 
 export * from '@/views/SignIn'
 export * from '@/views/NotFound'
