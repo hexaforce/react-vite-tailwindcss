@@ -1,55 +1,28 @@
-import './index.css';
+import './index.css'
+import { Cloudinary } from '@cloudinary/url-gen'
+import { AdvancedImage, AdvancedVideo, accessibility, responsive, lazyload, placeholder } from '@cloudinary/react'
+import { fill } from '@cloudinary/url-gen/actions/resize'
 
-// 1. Import classes
-// ==================
+export default function CloudinaryImage() {
 
-import React from 'react'
-import {AdvancedImage} from '@cloudinary/react';
-import {Cloudinary} from "@cloudinary/url-gen";
-
-// Import any actions required for transformations.
-import {fill} from "@cloudinary/url-gen/actions/resize";
-
-const App = () => {
-
-
-  // 2. Set your cloud name
-  //========================
-
-  // Create a Cloudinary instance and set your cloud name.
   const cld = new Cloudinary({
     cloud: {
-      cloudName: 'demo'
-    }
-  });
+      cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
+      apiKey: import.meta.env.VITE_CLOUDINARY_API_KEY,
+      apiSecret: import.meta.env.VITE_CLOUDINARY_API_SECRET,
+    },
+  })
 
+  const myImage = cld.image('test/f9fnmvpmrttdrty1ub6o')
 
-  // 3. Get your image
-  //===================
+  myImage.resize(fill().width(200).height(300))
 
-  // Instantiate a CloudinaryImage object for the image with the public ID, 'docs/models'.
-  const myImage = cld.image('docs/models'); 
-
-
-  // 4. Transform your image
-  //=========================
-
-  // Resize to 250 x 250 pixels using the 'fill' crop mode.
-  myImage.resize(fill().width(250).height(250));
-
-
-  // 5. Deliver your image
-  // =========================
-
-  // Render the image in a React component.
   return (
-    <div className="App-body">
+    <div className='App-body'>
       <div>
         <AdvancedImage cldImg={myImage} />
+        {/* <AdvancedImage cldImg={myImage} plugins={[lazyload(), responsive(100), placeholder()]} /> */}
       </div>
     </div>
   )
-
-};
-
-export default App;
+}
