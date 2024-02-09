@@ -3,10 +3,10 @@ import { Description, Stacked, Form, Top, Contact, FlightPointMap, SignIn, NotFo
 const subLayout = 'header'
 
 export const findNavigation = (pathname) => {
-  if (pathname === '/'){
-    return navigation.find((nav) => nav.path === '/map')
-  }
-  return navigation.find((nav) => nav.path === pathname)
+  let path = pathname === '/' ? '/map' : pathname
+  let currentNav = navigation.find((nav) => nav.path === path)
+  if (!currentNav) return navigation.find((nav) => nav.path === '/404')
+  return currentNav
 }
 
 export const navigation = [
