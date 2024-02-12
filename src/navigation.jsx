@@ -1,5 +1,5 @@
-import { Description, Stacked, Form, Top, Contact, FlightPointMap,MediaLibrary, SignIn, NotFound, Slide } from '@/views'
-
+import { Description, Stacked, Form, Top, Contact, FlightPointMap, MediaLibrary, SignIn, NotFound, Slide } from '@/views'
+import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 const subLayout = 'header'
 
 export const findNavigation = (pathname) => {
@@ -73,7 +73,18 @@ export const navigation = [
 ]
 
 export const userNavigation = [
-  { name: 'Your Profile', path: '#' },
-  { name: 'Settings', path: '#' },
-  { name: 'Sign out', path: '#' },
+  {
+    icon: <UserIcon className='-ml-0.5 mr-1.5 h-5 w-5' aria-hidden='true' />,
+    name: 'Your Profile',
+    path: '/profile',
+    element: <Contact />,
+    subLayout: subLayout,
+  },
+  {
+    icon: <Cog6ToothIcon className='-ml-0.5 mr-1.5 h-5 w-5' aria-hidden='true' />,
+    name: 'Settings',
+    path: '/settings',
+    element: <Stacked />,
+    subLayout: subLayout,
+  },
 ]
