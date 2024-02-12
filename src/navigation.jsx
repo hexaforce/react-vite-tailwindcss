@@ -5,7 +5,14 @@ const subLayout = 'header'
 export const findNavigation = (pathname) => {
   let path = pathname === '/' ? '/map' : pathname
   let currentNav = navigation.find((nav) => nav.path === path)
-  if (!currentNav) return navigation.find((nav) => nav.path === '/404')
+  if (!currentNav) currentNav = userNavigation.find((nav) => nav.path === path)
+  if (!currentNav)
+    return {
+      name: '404',
+      path: '/404',
+      element: <NotFound />,
+      subLayout: 'none',
+    }
   return currentNav
 }
 
@@ -56,12 +63,6 @@ export const navigation = [
   //   name: 'SignIn',
   //   path: '/sign-in',
   //   element: <SignIn />,
-  //   subLayout: 'none',
-  // },
-  // {
-  //   name: '404',
-  //   path: '/404',
-  //   element: <NotFound />,
   //   subLayout: 'none',
   // },
   // {
