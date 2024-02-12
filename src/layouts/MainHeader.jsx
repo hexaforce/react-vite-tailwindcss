@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useAuth0 } from '@auth0/auth0-react'
 
-import { ArrowRightStartOnRectangleIcon, ArrowLeftStartOnRectangleIcon, } from '@heroicons/react/20/solid'
+import { ArrowRightStartOnRectangleIcon, ArrowRightEndOnRectangleIcon, } from '@heroicons/react/20/solid'
 
 MainHeader.propTypes = {
   currentPath: PropTypes.string.isRequired,
@@ -96,7 +96,7 @@ export function MainHeader({ currentPath }) {
                 {!isAuthenticated && (
                   <span className='sm:ml-3'>
                     <button type='button' onClick={() => loginWithRedirect()} className='inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
-                      <ArrowLeftStartOnRectangleIcon className='-ml-0.5 mr-1.5 h-5 w-5' aria-hidden='true' />
+                      <ArrowRightEndOnRectangleIcon className='-ml-0.5 mr-1.5 h-5 w-5' aria-hidden='true' />
                       Sign in
                     </button>
                   </span>
