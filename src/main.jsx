@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { Auth0Provider } from '@auth0/auth0-react'
-// import { createBrowserHistory } from 'history'
 import App from '@/App'
 
 const apolloClient = new ApolloClient({
@@ -16,8 +15,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Auth0Provider
       domain={import.meta.env.VITE_DOMAIN}
       clientId={import.meta.env.VITE_CLIENT_ID}
-      onRedirectCallback={(appState) => {
-        history.push(appState && appState.returnTo ? appState.returnTo : window.location.pathname)
+      onRedirectCallback={(appState, user) => {
+        console.log(appState)
+        console.log(user)
       }}
       authorizationParams={{
         audience: import.meta.env.VITE_AUDIENCE,
