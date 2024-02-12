@@ -28,52 +28,52 @@ export const navigation = [
     element: <Description />,
     subLayout: subLayout,
   },
-  {
-    name: 'Stacked',
-    path: '/stacked',
-    element: <Stacked />,
-    subLayout: subLayout,
-  },
-  {
-    name: 'Form',
-    path: '/form',
-    element: <Form />,
-    subLayout: subLayout,
-  },
-  {
-    name: 'Top',
-    path: '/top',
-    element: <Top />,
-    subLayout: subLayout,
-  },
-  {
-    name: 'Contact',
-    path: '/contact',
-    element: <Contact />,
-    subLayout: subLayout,
-  },
-  {
-    name: 'SignIn',
-    path: '/sign-in',
-    element: <SignIn />,
-    subLayout: 'none',
-  },
-  {
-    name: '404',
-    path: '/404',
-    element: <NotFound />,
-    subLayout: 'none',
-  },
-  {
-    name: 'Slide',
-    path: '/slide',
-    element: <Slide />,
-    subLayout: 'none',
-  },
+  // {
+  //   name: 'Stacked',
+  //   path: '/stacked',
+  //   element: <Stacked />,
+  //   subLayout: subLayout,
+  // },
+  // {
+  //   name: 'Form',
+  //   path: '/form',
+  //   element: <Form />,
+  //   subLayout: subLayout,
+  // },
+  // {
+  //   name: 'Top',
+  //   path: '/top',
+  //   element: <Top />,
+  //   subLayout: subLayout,
+  // },
+  // {
+  //   name: 'Contact',
+  //   path: '/contact',
+  //   element: <Contact />,
+  //   subLayout: subLayout,
+  // },
+  // {
+  //   name: 'SignIn',
+  //   path: '/sign-in',
+  //   element: <SignIn />,
+  //   subLayout: 'none',
+  // },
+  // {
+  //   name: '404',
+  //   path: '/404',
+  //   element: <NotFound />,
+  //   subLayout: 'none',
+  // },
+  // {
+  //   name: 'Slide',
+  //   path: '/slide',
+  //   element: <Slide />,
+  //   subLayout: 'none',
+  // },
 ]
 
 export const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Your Profile', path: '#' },
+  { name: 'Settings', path: '#' },
+  { name: 'Sign out', path: '#' },
 ]

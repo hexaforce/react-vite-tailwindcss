@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Switch } from '@headlessui/react'
-import { classNames } from '@/utile'
+import { classNames } from '@/utils'
 
 export function Contact() {
   const [agreed, setAgreed] = useState(false)

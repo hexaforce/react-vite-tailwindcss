@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { BriefcaseIcon, CalendarIcon, CheckIcon, ChevronDownIcon, CurrencyDollarIcon, LinkIcon, MapPinIcon, PencilIcon } from '@heroicons/react/20/solid'
 import { Menu, Transition } from '@headlessui/react'
-import { classNames } from '@/utile'
+import { classNames } from '@/utils'
 import MapBox from '@/components/mapbox-gl'
 
 export function FlightPointMap() {
