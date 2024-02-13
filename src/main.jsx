@@ -13,8 +13,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       domain={import.meta.env.VITE_DOMAIN}
       clientId={import.meta.env.VITE_CLIENT_ID}
       onRedirectCallback={(appState, user) => {
-        console.log("appState:",appState)
-        console.log("user:",user)
+        console.log('appState:', appState)
+        console.log('user:', user)
       }}
       authorizationParams={{
         audience: import.meta.env.VITE_AUDIENCE,

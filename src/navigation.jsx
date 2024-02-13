@@ -1,4 +1,4 @@
-import { Description, Stacked, Form, Top, Contact, FlightPointMap, MediaLibrary, SignIn, NotFound, Slide, Products } from '@/views'
+import { Description, Stacked, Form, Top, Contact, FlightPointMap, MediaLibrary, SignIn, NotFound, Slide, Products, Chat } from '@/views'
 import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
 const subLayout = 'header'
@@ -36,13 +36,20 @@ export const navigation = [
     element: <Description />,
     subLayout: subLayout,
   },
+  {
+    name: 'Chat',
+    path: '/chat',
+    element: <Chat />,
+    subLayout: subLayout,
+  },
+  
   // {
   //   name: 'Products',
   //   path: '/products',
   //   element: <Products />,
   //   subLayout: subLayout,
   // },
-  
+
   // {
   //   name: 'Stacked',
   //   path: '/stacked',

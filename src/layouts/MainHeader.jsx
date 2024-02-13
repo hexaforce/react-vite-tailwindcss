@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useAuth0 } from '@auth0/auth0-react'
 
-import { ArrowRightStartOnRectangleIcon, ArrowRightEndOnRectangleIcon, } from '@heroicons/react/20/solid'
+import { ArrowRightStartOnRectangleIcon, ArrowRightEndOnRectangleIcon } from '@heroicons/react/20/solid'
 
 MainHeader.propTypes = {
   currentPath: PropTypes.string.isRequired,

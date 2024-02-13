@@ -116,6 +116,6 @@ function ContactComponent() {
 
 const Contact = withAuthenticationRequired(ContactComponent, {
   onRedirecting: () => <Loading />,
-});
+})
 
-export default Contact;
+export default Contact
