@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Switch } from '@headlessui/react'
 import { classNames } from '@/utils'
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
+import { Loading } from '@/assets/Loading'
 
-export function Contact() {
+function ContactX() {
   const [agreed, setAgreed] = useState(false)
 
   return (
@@ -110,3 +112,14 @@ export function Contact() {
     </div>
   )
 }
+
+// withAuthenticationRequired(ContactX, {
+//   onRedirecting: () => <Loading />,
+// })
+
+// export function Contact () => withAuthenticationRequired(ContactX, {
+//   onRedirecting: () => <Loading />,
+// })
+
+// const Contact = withAuthenticationRequired(ContactX);
+// export Contact

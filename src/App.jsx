@@ -8,7 +8,7 @@ import { Loading } from '@/assets/Loading'
 function App() {
   const { pathname } = useLocation()
   const currentNav = findNavigation(pathname)
-  const { isLoading, error } = useAuth0()
+  const { isLoading, error, getAccessTokenSilently } = useAuth0()
 
   if (error) {
     return <div>Oops... {error.message}</div>
@@ -17,6 +17,10 @@ function App() {
   if (isLoading) {
     return <Loading />
   }
+
+  getAccessTokenSilently().then((token) => console.log('token:', token))
+  // const token = await getAccessTokenSilently()
+  // console.log("token:",token)
   // let layout
 
   // switch (currentNav?.layout) {
