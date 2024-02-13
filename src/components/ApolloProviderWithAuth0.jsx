@@ -7,8 +7,10 @@ import { setContext } from '@apollo/client/link/context'
 
 import PropTypes from 'prop-types'
 
+const TOKEN_TYPE = 'id'
+
 const ApolloProviderWithAuth0 = ({ children }) => {
-  const { getAccessTokenSilently } = useAuth0()
+  const { getAccessTokenSilently, getIdTokenClaims } = useAuth0()
 
   const httpLink = new HttpLink({
     uri: import.meta.env.VITE_GRAPHQL_ENDPOINT,
@@ -17,7 +19,10 @@ const ApolloProviderWithAuth0 = ({ children }) => {
   const authLink = setContext(async (_, { headers, ...rest }) => {
     let token
     try {
-      token = await getAccessTokenSilently()
+      if (TOKEN_TYPE === 'id') {
+        const idTokenClaims = await getIdTokenClaims()
+        token = idTokenClaims.__raw
+      } else if (TOKEN_TYPE === 'access') token = await getAccessTokenSilently()
     } catch (error) {
       console.log(error)
     }
