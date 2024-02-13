@@ -44,28 +44,33 @@ export default function CloudinaryImage() {
   })
 
   return (
-    <div className='App-body'>
-      <ul>
-        {data.assets.resources.map((asset) => (
-          <li key={asset.asset_id}>
-            <AdvancedImage cldImg={c.image(asset.public_id).resize(fill().width(200).height(300))} />
-            {/* <AdvancedImage cldImg={myImage} plugins={[lazyload(), responsive(100), placeholder()]} /> */}
-            <p>Asset ID: {asset.asset_id}</p>
-            <p>Public ID: {asset.public_id}</p>
-            <p>Format: {asset.format}</p>
-            <p>Version: {asset.version}</p>
-            <p>Resource Type: {asset.resource_type}</p>
-            <p>Type: {asset.type}</p>
-            <p>Created At: {asset.created_at}</p>
-            <p>Bytes: {asset.bytes}</p>
-            <p>Width: {asset.width}</p>
-            <p>Height: {asset.height}</p>
-            <p>Folder: {asset.folder}</p>
-            <p>URL: {asset.url}</p>
-            <p>Secure URL: {asset.secure_url}</p>
-          </li>
-        ))}
-      </ul>
+    <div className='bg-white'>
+      <div className='mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8'>
+        <h2 className='text-2xl font-bold tracking-tight text-gray-900'>Customers also purchased</h2>
+
+        <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
+          {data?.assets.resources.map(({ asset_id, public_id, format, version, resource_type, type, created_at, bytes, width, height, folder, url, secure_url }) => (
+            <div key={asset_id} className='group relative'>
+              <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80'>
+                {/* <img src={product.imageSrc} alt={product.imageAlt} className='h-full w-full object-cover object-center lg:h-full lg:w-full' /> */}
+                <AdvancedImage cldImg={c.image(public_id).resize(fill().width(200).height(300))} className='h-full w-full object-cover object-center lg:h-full lg:w-full'/>
+              </div>
+              <div className='mt-4 flex justify-between'>
+                <div>
+                  <h3 className='text-sm text-gray-700'>
+                    <a href={url}>
+                      <span aria-hidden='true' className='absolute inset-0' />
+                      {`${width} x ${height}`}
+                    </a>
+                  </h3>
+                  <p className='mt-1 text-sm text-gray-500'>{resource_type}</p>
+                </div>
+                <p className='text-sm font-medium text-gray-900'>{created_at}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

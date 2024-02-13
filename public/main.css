@@ -739,6 +739,26 @@ select {
   --tw-backdrop-sepia:  ;
 }
 
+.aspect-h-1 {
+  --tw-aspect-h: 1;
+}
+
+.aspect-w-1 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  --tw-aspect-w: 1;
+}
+
+.aspect-w-1 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -870,10 +890,6 @@ select {
   margin-right: -0.25rem;
 }
 
-.-mr-2 {
-  margin-right: -0.5rem;
-}
-
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -882,20 +898,12 @@ select {
   margin-left: 0.375rem;
 }
 
-.ml-10 {
-  margin-left: 2.5rem;
-}
-
 .ml-3 {
   margin-left: 0.75rem;
 }
 
 .ml-4 {
   margin-left: 1rem;
-}
-
-.ml-auto {
-  margin-left: auto;
 }
 
 .mr-1 {
@@ -1018,10 +1026,6 @@ select {
   width: 0.375rem;
 }
 
-.w-10 {
-  width: 2.5rem;
-}
-
 .w-12 {
   width: 3rem;
 }
@@ -1088,10 +1092,6 @@ select {
 
 .max-w-xl {
   max-width: 36rem;
-}
-
-.max-w-xs {
-  max-width: 20rem;
 }
 
 .flex-1 {
@@ -1198,10 +1198,6 @@ select {
   align-items: center;
 }
 
-.items-baseline {
-  align-items: baseline;
-}
-
 .justify-end {
   justify-content: flex-end;
 }
@@ -1246,6 +1242,10 @@ select {
 .gap-x-8 {
   -moz-column-gap: 2rem;
        column-gap: 2rem;
+}
+
+.gap-y-10 {
+  row-gap: 2.5rem;
 }
 
 .gap-y-6 {
@@ -1356,11 +1356,6 @@ select {
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
-.border-gray-700 {
-  --tw-border-opacity: 1;
-  border-color: rgb(55 65 81 / var(--tw-border-opacity));
-}
-
 .border-gray-900\/10 {
   border-color: rgb(17 24 39 / 0.1);
 }
@@ -1444,6 +1439,16 @@ select {
   --tw-gradient-to: #9089fc var(--tw-gradient-to-position);
 }
 
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.object-center {
+  -o-object-position: center;
+     object-position: center;
+}
+
 .p-1 {
   padding: 0.25rem;
 }
@@ -1481,11 +1486,6 @@ select {
   padding-right: 1rem;
 }
 
-.px-5 {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-}
-
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -1514,6 +1514,11 @@ select {
 .py-12 {
   padding-top: 3rem;
   padding-bottom: 3rem;
+}
+
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 .py-2 {
@@ -1673,10 +1678,6 @@ select {
 
 .leading-9 {
   line-height: 2.25rem;
-}
-
-.leading-none {
-  line-height: 1;
 }
 
 .tracking-tight {
@@ -1842,6 +1843,23 @@ select {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
+@media (min-width: 1024px) {
+  .lg\:aspect-none {
+    position: static;
+    padding-bottom: 0;
+  }
+
+  .lg\:aspect-none > * {
+    position: static;
+    height: auto;
+    width: auto;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+}
+
 .placeholder\:text-gray-400::-moz-placeholder {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
@@ -1963,6 +1981,10 @@ select {
 
 .focus-visible\:outline-indigo-600:focus-visible {
   outline-color: #4f46e5;
+}
+
+.group:hover .group-hover\:opacity-75 {
+  opacity: 0.75;
 }
 
 @media (min-width: 640px) {
@@ -2124,14 +2146,14 @@ select {
     padding-right: 0px;
   }
 
-  .sm\:px-3 {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-  }
-
   .sm\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  .sm\:py-24 {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
 
   .sm\:py-32 {
@@ -2190,20 +2212,6 @@ select {
   }
 }
 
-@media (min-width: 768px) {
-  .md\:ml-6 {
-    margin-left: 1.5rem;
-  }
-
-  .md\:block {
-    display: block;
-  }
-
-  .md\:hidden {
-    display: none;
-  }
-}
-
 @media (min-width: 1024px) {
   .lg\:ml-4 {
     margin-left: 1rem;
@@ -2215,6 +2223,26 @@ select {
 
   .lg\:flex {
     display: flex;
+  }
+
+  .lg\:h-80 {
+    height: 20rem;
+  }
+
+  .lg\:h-full {
+    height: 100%;
+  }
+
+  .lg\:w-full {
+    width: 100%;
+  }
+
+  .lg\:max-w-7xl {
+    max-width: 80rem;
+  }
+
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .lg\:items-center {
@@ -2243,5 +2271,12 @@ select {
   .lg\:py-6 {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:gap-x-8 {
+    -moz-column-gap: 2rem;
+         column-gap: 2rem;
   }
 }
