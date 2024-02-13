@@ -5,9 +5,10 @@ import { classNames } from '@/utils'
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
 import { Loading } from '@/assets/Loading'
 
-function ContactX() {
+function ContactComponent() {
   const [agreed, setAgreed] = useState(false)
-
+  // const { getAccessTokenSilently } = useAuth0();
+  // const token = await getAccessTokenSilently();
   return (
     <div className='isolate bg-white px-6 py-24 sm:py-32 lg:px-8'>
       {/* 
@@ -113,13 +114,8 @@ function ContactX() {
   )
 }
 
-// withAuthenticationRequired(ContactX, {
-//   onRedirecting: () => <Loading />,
-// })
+const Contact = withAuthenticationRequired(ContactComponent, {
+  onRedirecting: () => <Loading />,
+});
 
-// export function Contact () => withAuthenticationRequired(ContactX, {
-//   onRedirecting: () => <Loading />,
-// })
-
-// const Contact = withAuthenticationRequired(ContactX);
-// export Contact
+export default Contact;

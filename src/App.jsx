@@ -2,13 +2,13 @@ import { MainLayout } from '@/layouts/MainLayout'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { findNavigation, navigation, userNavigation } from '@/navigation'
 import { FlightPointMap } from '@/views'
-import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
+import { useAuth0 } from '@auth0/auth0-react'
 import { Loading } from '@/assets/Loading'
 
 function App() {
   const { pathname } = useLocation()
   const currentNav = findNavigation(pathname)
-  const { isLoading, error, getAccessTokenSilently } = useAuth0()
+  const { isLoading, error } = useAuth0()
 
   if (error) {
     return <div>Oops... {error.message}</div>
@@ -18,7 +18,7 @@ function App() {
     return <Loading />
   }
 
-  getAccessTokenSilently().then((token) => console.log('token:', token))
+  // getAccessTokenSilently().then((token) => console.log('token:', token))
   // const token = await getAccessTokenSilently()
   // console.log("token:",token)
   // let layout
