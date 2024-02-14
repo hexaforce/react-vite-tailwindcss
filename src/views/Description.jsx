@@ -1,9 +1,9 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { gql, useQuery } from '@apollo/client'
 
-const ECHO = gql`
-  query S3Contents {
-    echo {
+const listObjectsV2 = gql`
+  query listObjectsV2 {
+    listObjectsV2 {
       Contents {
         Key
         LastModified
@@ -26,12 +26,12 @@ const ECHO = gql`
 // `
 
 function DisplayEcho() {
-  const { loading, error, data } = useQuery(ECHO)
+  const { loading, error, data } = useQuery(listObjectsV2)
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
 
-  return <pre>{JSON.stringify(data?.echo, null, 2)}</pre>
+  return <pre>{JSON.stringify(data?.listObjectsV2.Contents, null, 2)}</pre>
 }
 
 // function DisplayUsers() {
