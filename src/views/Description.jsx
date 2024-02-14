@@ -1,29 +1,52 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { gql, useQuery } from '@apollo/client'
 
-const ALL_USERS_QUERY = gql`
-  query AllUsers {
-    allUsers {
-      id
-      email
-      registered_at
+const ECHO = gql`
+  query S3Contents {
+    echo {
+      Contents {
+        Key
+        LastModified
+        ETag
+        Size
+        StorageClass
+      }
     }
   }
 `
 
-function DisplayUsers() {
-  const { loading, error, data } = useQuery(ALL_USERS_QUERY)
+// const ALL_USERS_QUERY = gql`
+//   query AllUsers {
+//     allUsers {
+//       id
+//       email
+//       registered_at
+//     }
+//   }
+// `
+
+function DisplayEcho() {
+  const { loading, error, data } = useQuery(ECHO)
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
 
-  return data?.allUsers.map(({ id, email, registered_at }) => (
-    <div key={id}>
-      <p>Email: {email}</p>
-      <p>Registered At: {registered_at}</p>
-    </div>
-  ))
+  return <pre>{JSON.stringify(data?.echo, null, 2)}</pre>
 }
+
+// function DisplayUsers() {
+//   const { loading, error, data } = useQuery(ALL_USERS_QUERY)
+
+//   if (loading) return <div>Loading...</div>
+//   if (error) return <div>Error: {error.message}</div>
+
+//   return data?.allUsers.map(({ id, email, registered_at }) => (
+//     <div key={id}>
+//       <p>Email: {email}</p>
+//       <p>Registered At: {registered_at}</p>
+//     </div>
+//   ))
+// }
 
 export function Description() {
   return (
@@ -32,7 +55,8 @@ export function Description() {
         <h3 className='text-base font-semibold leading-7 text-gray-900'>Applicant Information</h3>
         <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>Personal details and application.</p>
       </div>
-      <DisplayUsers />
+      <DisplayEcho />
+      {/* <DisplayUsers /> */}
       <div className='mt-6 border-t border-gray-100'>
         <dl className='divide-y divide-gray-100'>
           <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>

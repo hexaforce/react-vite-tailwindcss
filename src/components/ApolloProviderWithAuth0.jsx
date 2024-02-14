@@ -19,10 +19,8 @@ const ApolloProviderWithAuth0 = ({ children }) => {
   const authLink = setContext(async (_, { headers, ...rest }) => {
     let token
     try {
-      if (TOKEN_TYPE === 'id') {
-        const idTokenClaims = await getIdTokenClaims()
-        token = idTokenClaims.__raw
-      } else if (TOKEN_TYPE === 'access') token = await getAccessTokenSilently()
+      if (TOKEN_TYPE === 'id') token = (await getIdTokenClaims()).__raw
+      if (TOKEN_TYPE === 'access') token = await getAccessTokenSilently()
     } catch (error) {
       console.log(error)
     }
