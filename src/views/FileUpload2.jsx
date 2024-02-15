@@ -136,36 +136,39 @@ function FileUpload2() {
   const [submitClicked, setSubmitClicked] = useState(false)
   const [names, setNames] = useState([])
 
-  const GET_POST_OBJECTS = gql`
-    query GetPostObjects($names: [String!]!) {
-      postObjectV4(names: $names) {
-        Objects {
-          action
-          method
-          enctype
-          acl
-          key
-          # xAmzCredential
-          # xAmzAlgorithm
-          # xAmzDate
-          # policy
-        }
+  // const GET_POST_OBJECTS = gql`
+  //   query GetPostObjects($names: [String!]!) {
+  //     postObjectV4(names: $names) {
+  //       Objects {
+  //         action
+  //         method
+  //         enctype
+  //         acl
+  //         key
+  //         # xAmzCredential
+  //         # xAmzAlgorithm
+  //         # xAmzDate
+  //         # policy
+  //       }
+  //     }
+  //   }
+  // `
+  // const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
+  //   variables: { names },
+  //   skip: !submitClicked,
+  // })
+  const CREATE_PRESIGNED_REQUEST = gql`
+    query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
+      createPresignedRequest(fileNames: $fileNames, command: $command, expires: $expires) {
+        fileName
+        presignedUrl
       }
     }
   `
-  const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
-    variables: { names },
+  const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
+    variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
     skip: !submitClicked,
   })
-  // const CREATE_PRESIGNED_REQUEST = gql`
-  //   query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
-  //     createPresignedRequest(fileNames: $fileNames, command: $command, expires: $expires)
-  //   }
-  // `
-  // const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
-  //   variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
-  //   skip: !submitClicked,
-  // })
 
   function submit() {
     setSubmitClicked(true)
@@ -180,35 +183,32 @@ function FileUpload2() {
   //   }
   // }, [submitClicked, names, refetch])
 
-  // async function uploadFileToS3(file, presignUrl, key) {
-  //   // console.log("key:",key)
-  //   // console.log("file:",file)
-  //   // console.log("presignUrl:",presignUrl)
-  //   try {
-  //     const formData = new FormData()
-  //     formData.append('key', key)
-  //     formData.append('file', file)
-  //     const response = await fetch(presignUrl, {
-  //       method: 'POST',
-  //       body: formData,
-  //     })
-  //     if (!response.ok) {
-  //       throw new Error('Failed to upload file to S3')
-  //     }
-  //     console.log('File uploaded successfully')
-  //   } catch (error) {
-  //     console.error('Error uploading file:', error)
-  //   }
-  // }
+  async function uploadFileToS3(fileBlob, presignUrl) {
+    try {
+      const formData = new FormData()
+      formData.append('file', fileBlob)
+      formData.append('key', fileBlob.name)
+      const response = await fetch(presignUrl, {
+        method: 'POST',
+        body: formData,
+      })
+      if (!response.ok) {
+        throw new Error('Failed to upload file to S3')
+      }
+      console.log('File uploaded successfully')
+    } catch (error) {
+      console.error('Error uploading file:', error)
+    }
+  }
 
   useEffect(() => {
     if (loading || !data) return
     console.log('data:', data)
-    // Object.keys(files).map((objectURL) => {
-    //   const file = files[objectURL]
-    //   const presign = data.postObjectV4.Objects.find((s3) => s3.key.lastIndexOf(file.name) !== -1)
-    //   uploadFileToS3(file, presign.action, presign.key)
-    // })
+    Object.keys(files).map((objectURL) => {
+      const fileBlob = files[objectURL]
+      const presignedUrl = data.createPresignedRequest.find((result) => result.fileName === fileBlob.name).presignedUrl
+      uploadFileToS3(fileBlob, presignedUrl)
+    })
   }, [loading, error, data, files])
 
   return (
