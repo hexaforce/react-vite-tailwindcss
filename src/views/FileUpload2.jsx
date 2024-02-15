@@ -72,40 +72,6 @@ function FileFemplate({ objectURL, deleteFile }) {
   )
 }
 
-// const GET_POST_OBJECTS = gql`
-//   query GetPostObjects($names: [String!]!) {
-//     postObjectV4(names: $names) {
-//       Objects {
-//         formAttributes {
-//           action
-//           method
-//           enctype
-//         }
-//         formInputs {
-//           acl
-//           key
-//           xAmzCredential
-//           xAmzAlgorithm
-//           xAmzDate
-//           policy
-//         }
-//       }
-//     }
-//   }
-// `
-
-const GET_POST_OBJECTS = gql`
-  query GetPostObjects($names: [String!]!) {
-    postObjectV4(names: $names) {
-      Objects {
-        action
-        method
-        enctype
-      }
-    }
-  }
-`
-
 function FileUpload2() {
   const [isDraggedOver, setIsDraggedOver] = useState(false)
   const [counter, setCounter] = useState(0)
@@ -167,23 +133,84 @@ function FileUpload2() {
     setFiles(newFiles)
   }
 
+  const [submitClicked, setSubmitClicked] = useState(false)
   const [names, setNames] = useState([])
-  const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
-    variables: { names },
+
+  const GET_POST_OBJECTS = gql`
+    query GetPostObjects($names: [String!]!) {
+      postObjectV4(names: $names) {
+        Objects {
+          action
+          method
+          enctype
+          acl
+          key
+          # xAmzCredential
+          # xAmzAlgorithm
+          # xAmzDate
+          # policy
+        }
+      }
+    }
+  `
+  // const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
+  //   variables: { names },
+  //   skip: !submitClicked,
+  // })
+  const CREATE_PRESIGNED_REQUEST = gql`
+    query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
+      createPresignedRequest(fileNames: $fileNames, command: $command, expires: $expires)
+    }
+  `
+  const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
+    variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
+    skip: !submitClicked,
   })
 
+  // const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
+  //   variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
+  //   skip: !submitClicked,
+  // })
+
   function submit() {
+    setSubmitClicked(true)
     setNames(Object.keys(files).map((objectURL) => files[objectURL].name))
   }
 
-  useEffect(() => {
-    console.log('refetch')
-    refetch()
-  }, [names, refetch])
+  // useEffect(() => {
+  //   refetch()
+  // }, [names, refetch])
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
+  // async function uploadFileToS3(file, presignUrl, key) {
+  //   // console.log("key:",key)
+  //   // console.log("file:",file)
+  //   // console.log("presignUrl:",presignUrl)
+  //   try {
+  //     const formData = new FormData()
+  //     formData.append('key', key)
+  //     formData.append('file', file)
+  //     const response = await fetch(presignUrl, {
+  //       method: 'POST',
+  //       body: formData,
+  //     })
+  //     if (!response.ok) {
+  //       throw new Error('Failed to upload file to S3')
+  //     }
+  //     console.log('File uploaded successfully')
+  //   } catch (error) {
+  //     console.error('Error uploading file:', error)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (loading || !data) return
+  //   console.log('data:', data)
+  //   // Object.keys(files).map((objectURL) => {
+  //   //   const file = files[objectURL]
+  //   //   const presign = data.postObjectV4.Objects.find((s3) => s3.key.lastIndexOf(file.name) !== -1)
+  //   //   uploadFileToS3(file, presign.action, presign.key)
+  //   // })
+  // }, [loading, error, data, files])
 
   return (
     <div className='h-screen w-screen bg-gray-500 sm:px-8 sm:py-8 md:px-16'>
