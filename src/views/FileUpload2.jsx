@@ -176,13 +176,6 @@ function FileUpload2() {
     refetch()
   }
 
-  // useEffect(() => {
-  //   if (names.length > 0){
-  //     console.log("refetch")
-  //     refetch()
-  //   }
-  // }, [submitClicked, names, refetch])
-
   async function uploadFileToS3(fileBlob, presignUrl) {
     try {
       const formData = new FormData()
@@ -193,11 +186,15 @@ function FileUpload2() {
         body: formData,
       })
       if (!response.ok) {
-        throw new Error('Failed to upload file to S3')
+        var parser = new DOMParser()
+        var xmlDoc = parser.parseFromString(await response.text(), 'text/xml')
+        var code = xmlDoc.getElementsByTagName('Code')[0].textContent
+        var message = xmlDoc.getElementsByTagName('Message')[0].textContent
+        throw new Error(`Code: ${code} Message: ${message}`)
       }
       console.log('File uploaded successfully')
     } catch (error) {
-      console.error('Error uploading file:', error)
+      console.error(error.message)
     }
   }
 
