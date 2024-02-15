@@ -153,20 +153,15 @@ function FileUpload2() {
       }
     }
   `
-  // const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
-  //   variables: { names },
-  //   skip: !submitClicked,
-  // })
-  const CREATE_PRESIGNED_REQUEST = gql`
-    query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
-      createPresignedRequest(fileNames: $fileNames, command: $command, expires: $expires)
-    }
-  `
-  const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
-    variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
+  const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
+    variables: { names },
     skip: !submitClicked,
   })
-
+  // const CREATE_PRESIGNED_REQUEST = gql`
+  //   query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
+  //     createPresignedRequest(fileNames: $fileNames, command: $command, expires: $expires)
+  //   }
+  // `
   // const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
   //   variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
   //   skip: !submitClicked,
@@ -175,11 +170,15 @@ function FileUpload2() {
   function submit() {
     setSubmitClicked(true)
     setNames(Object.keys(files).map((objectURL) => files[objectURL].name))
+    refetch()
   }
 
   // useEffect(() => {
-  //   refetch()
-  // }, [names, refetch])
+  //   if (names.length > 0){
+  //     console.log("refetch")
+  //     refetch()
+  //   }
+  // }, [submitClicked, names, refetch])
 
   // async function uploadFileToS3(file, presignUrl, key) {
   //   // console.log("key:",key)
@@ -202,15 +201,15 @@ function FileUpload2() {
   //   }
   // }
 
-  // useEffect(() => {
-  //   if (loading || !data) return
-  //   console.log('data:', data)
-  //   // Object.keys(files).map((objectURL) => {
-  //   //   const file = files[objectURL]
-  //   //   const presign = data.postObjectV4.Objects.find((s3) => s3.key.lastIndexOf(file.name) !== -1)
-  //   //   uploadFileToS3(file, presign.action, presign.key)
-  //   // })
-  // }, [loading, error, data, files])
+  useEffect(() => {
+    if (loading || !data) return
+    console.log('data:', data)
+    // Object.keys(files).map((objectURL) => {
+    //   const file = files[objectURL]
+    //   const presign = data.postObjectV4.Objects.find((s3) => s3.key.lastIndexOf(file.name) !== -1)
+    //   uploadFileToS3(file, presign.action, presign.key)
+    // })
+  }, [loading, error, data, files])
 
   return (
     <div className='h-screen w-screen bg-gray-500 sm:px-8 sm:py-8 md:px-16'>
