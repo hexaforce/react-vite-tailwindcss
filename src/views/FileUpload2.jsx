@@ -1,16 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '@/assets/scss/FileUpload.scss'
 import PropTypes from 'prop-types'
+import { gql, useQuery } from '@apollo/client'
 
 const fileSize = (size) => {
   return size > 1024 ? (size > 1048576 ? Math.round(size / 1048576) + 'mb' : Math.round(size / 1024) + 'kb') : size + 'b'
 }
 
 ImageTemplate.propTypes = {
-  objectURL: {
-    name: PropTypes.string.isRequired,
-    size: PropTypes.number.isRequired,
-  },
+  objectURL: PropTypes.instanceOf(Blob).isRequired,
   deleteFile: PropTypes.func.isRequired,
 }
 
@@ -43,10 +41,7 @@ function ImageTemplate({ objectURL, deleteFile }) {
 }
 
 FileFemplate.propTypes = {
-  objectURL: {
-    name: PropTypes.string.isRequired,
-    size: PropTypes.number.isRequired,
-  },
+  objectURL: PropTypes.instanceOf(Blob).isRequired,
   deleteFile: PropTypes.func.isRequired,
 }
 
@@ -76,6 +71,40 @@ function FileFemplate({ objectURL, deleteFile }) {
     </article>
   )
 }
+
+// const GET_POST_OBJECTS = gql`
+//   query GetPostObjects($names: [String!]!) {
+//     postObjectV4(names: $names) {
+//       Objects {
+//         formAttributes {
+//           action
+//           method
+//           enctype
+//         }
+//         formInputs {
+//           acl
+//           key
+//           xAmzCredential
+//           xAmzAlgorithm
+//           xAmzDate
+//           policy
+//         }
+//       }
+//     }
+//   }
+// `
+
+const GET_POST_OBJECTS = gql`
+  query GetPostObjects($names: [String!]!) {
+    postObjectV4(names: $names) {
+      Objects {
+        action
+        method
+        enctype
+      }
+    }
+  }
+`
 
 function FileUpload2() {
   const [isDraggedOver, setIsDraggedOver] = useState(false)
@@ -138,9 +167,23 @@ function FileUpload2() {
     setFiles(newFiles)
   }
 
+  const [names, setNames] = useState([])
+  const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
+    variables: { names },
+  })
+
   function submit() {
-    console.log(files)
+    setNames(Object.keys(files).map((objectURL) => files[objectURL].name))
   }
+
+  useEffect(() => {
+    console.log('refetch')
+    refetch()
+  }, [names, refetch])
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
 
   return (
     <div className='h-screen w-screen bg-gray-500 sm:px-8 sm:py-8 md:px-16'>
