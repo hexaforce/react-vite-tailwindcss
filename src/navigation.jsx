@@ -1,6 +1,7 @@
-import { Description, Stacked, Form, Top, Contact, FlightPointMap, MediaLibrary, SignIn, NotFound, Slide, Products, Chat } from '@/views'
+import { Description, Stacked, Form, Top, Contact, FlightPointMap, MediaLibrary, SignIn, NotFound, Slide, Products, Chat, FileUpload } from '@/views'
 import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
+import FileUpload2 from '@//views/FileUpload2'
 const subLayout = 'header'
 
 export const findNavigation = (pathname) => {
@@ -42,7 +43,13 @@ export const navigation = [
     element: <Chat />,
     subLayout: subLayout,
   },
-  
+  {
+    name: 'FileUpload',
+    path: '/fileUpload',
+    element: <FileUpload2 />,
+    subLayout: subLayout,
+  },
+
   // {
   //   name: 'Products',
   //   path: '/products',

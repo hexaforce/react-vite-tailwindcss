@@ -15,6 +15,20 @@ const listObjectsV2 = gql`
   }
 `
 
+const postObjectV4 = gql`
+  query postObjectV4 {
+    postObjectV4 {
+      Contents {
+        Key
+        LastModified
+        ETag
+        Size
+        StorageClass
+      }
+    }
+  }
+`
+
 // const ALL_USERS_QUERY = gql`
 //   query AllUsers {
 //     allUsers {
@@ -26,7 +40,8 @@ const listObjectsV2 = gql`
 // `
 
 function DisplayEcho() {
-  const { loading, error, data } = useQuery(listObjectsV2)
+  // const { loading, error, data } = useQuery(listObjectsV2)
+  const { loading, error, data } = useQuery(postObjectV4)
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
@@ -55,7 +70,7 @@ export function Description() {
         <h3 className='text-base font-semibold leading-7 text-gray-900'>Applicant Information</h3>
         <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>Personal details and application.</p>
       </div>
-      <DisplayEcho />
+      {/* <DisplayEcho /> */}
       {/* <DisplayUsers /> */}
       <div className='mt-6 border-t border-gray-100'>
         <dl className='divide-y divide-gray-100'>
