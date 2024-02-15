@@ -1,16 +1,24 @@
 import { useState } from 'react'
 import '@/assets/scss/FileUpload.scss'
+import PropTypes from 'prop-types'
 
 const fileSize = (size) => {
   return size > 1024 ? (size > 1048576 ? Math.round(size / 1048576) + 'mb' : Math.round(size / 1024) + 'kb') : size + 'b'
 }
 
+ImageTemplate.propTypes = {
+  objectURL: {
+    name: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
+  },
+  deleteFile: PropTypes.func.isRequired,
+}
+
 function ImageTemplate({ objectURL, deleteFile }) {
-    
   return (
     <article tabIndex='0' className='group hasImage w-full h-full rounded-md focus:outline-none focus:shadow-outline bg-gray-100 cursor-pointer relative text-transparent hover:text-white shadow-sm'>
       <img src={URL.createObjectURL(objectURL)} alt={objectURL.name} className='img-preview w-full h-full sticky object-cover rounded-md bg-fixed' />
-      
+
       <section className='flex flex-col rounded-md text-xs break-words w-full h-full z-20 absolute top-0 py-2 px-3'>
         <h1 className='flex-1'>{objectURL.name}</h1>
         <div className='flex'>
@@ -32,6 +40,14 @@ function ImageTemplate({ objectURL, deleteFile }) {
       </section>
     </article>
   )
+}
+
+FileFemplate.propTypes = {
+  objectURL: {
+    name: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
+  },
+  deleteFile: PropTypes.func.isRequired,
 }
 
 function FileFemplate({ objectURL, deleteFile }) {
@@ -62,17 +78,36 @@ function FileFemplate({ objectURL, deleteFile }) {
 }
 
 function FileUpload2() {
+  const [isDraggedOver, setIsDraggedOver] = useState(false)
+  const [counter, setCounter] = useState(0)
+
   function dropHandler(event) {
-    console.log(event)
+    event.preventDefault()
+    setIsDraggedOver(false)
+    setCounter(0)
+    const droppedFiles = event.dataTransfer.files
+    for (const file of droppedFiles) {
+      addFile(file)
+    }
   }
+
   function dragOverHandler(event) {
-    console.log(event)
+    event.preventDefault()
   }
+
   function dragLeaveHandler(event) {
-    console.log(event)
+    event.preventDefault()
+    if (1 > counter - 1) {
+      setIsDraggedOver(false)
+    } else {
+      setCounter(counter - 1)
+    }
   }
+
   function dragEnterHandler(event) {
-    console.log(event)
+    event.preventDefault()
+    setIsDraggedOver(true)
+    setCounter(1 + counter)
   }
 
   const [files, setFiles] = useState({})
@@ -81,7 +116,6 @@ function FileUpload2() {
     const newFiles = { ...files }
     const objectURL = URL.createObjectURL(file)
     newFiles[objectURL] = file
-    console.log(newFiles)
     setFiles(newFiles)
   }
 
@@ -91,10 +125,21 @@ function FileUpload2() {
       addFile(file)
     }
   }
+
   function deleteFile(objectURL) {
     const newFiles = { ...files }
-    delete newFiles[objectURL]
+    const keys = Object.keys(newFiles)
+    for (const key of keys) {
+      if (newFiles[key] === objectURL) {
+        delete newFiles[key]
+        break
+      }
+    }
     setFiles(newFiles)
+  }
+
+  function submit() {
+    console.log(files)
   }
 
   return (
@@ -103,7 +148,7 @@ function FileUpload2() {
         {/* file upload modal */}
         <article aria-label='File Upload Modal' className='relative flex h-full flex-col rounded-md bg-white shadow-xl' onDrop={dropHandler} onDragOver={dragOverHandler} onDragLeave={dragLeaveHandler} onDragEnter={dragEnterHandler}>
           {/* overlay */}
-          <div id='overlay' className='pointer-events-none absolute left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center rounded-md'>
+          <div id='overlay' className={`pointer-events-none absolute left-0 top-0 z-50 flex h-full w-full flex-col items-center justify-center rounded-md ${isDraggedOver ? 'draggedover' : ''}`}>
             <i>
               <svg className='mb-3 h-12 w-12 fill-current text-blue-700' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
                 <path d='M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479-1.092l4 4h-3v4h-2v-4h-3l4-4z' />
@@ -144,10 +189,10 @@ function FileUpload2() {
 
           {/* sticky footer */}
           <footer className='flex justify-end px-8 pb-8 pt-4'>
-            <button id='submit' className='focus:shadow-outline rounded-sm bg-blue-700 px-3 py-1 text-white hover:bg-blue-500 focus:outline-none'>
+            <button className='focus:shadow-outline rounded-sm bg-blue-700 px-3 py-1 text-white hover:bg-blue-500 focus:outline-none' onClick={() => submit()}>
               Upload now
             </button>
-            <button id='cancel' className='focus:shadow-outline ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:outline-none'>
+            <button id='cancel' className='focus:shadow-outline ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:outline-none' onClick={() => setFiles({})}>
               Cancel
             </button>
           </footer>
