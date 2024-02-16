@@ -3,7 +3,7 @@ import '@/assets/scss/FileUpload.scss'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/client'
 
-import { uploadFileToS3, CREATE_PRESIGNED_REQUEST, fileSize } from '@/utils/FileUpload'
+import { uploadFileToS3, CREATE_PRESIGNED_REQUEST, fileSize } from '@/queries/FileUpload'
 
 ImageTemplate.propTypes = {
   objectURL: PropTypes.instanceOf(Blob).isRequired,

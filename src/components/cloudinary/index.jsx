@@ -4,30 +4,8 @@ import {
   AdvancedImage, // AdvancedVideo, accessibility, responsive, lazyload, placeholder
 } from '@cloudinary/react'
 import { fill } from '@cloudinary/url-gen/actions/resize'
-import { gql, useQuery } from '@apollo/client'
-
-const ASSETS_QUERY = gql`
-  query Assets {
-    assets {
-      next_cursor
-      resources {
-        asset_id
-        public_id
-        format
-        version
-        resource_type
-        type
-        created_at
-        bytes
-        width
-        height
-        folder
-        url
-        secure_url
-      }
-    }
-  }
-`
+import { useQuery } from '@apollo/client'
+import { ASSETS_QUERY } from '@/queries/MediaLibrary'
 
 export default function CloudinaryImage() {
   const { loading, error, data } = useQuery(ASSETS_QUERY)

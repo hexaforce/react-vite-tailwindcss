@@ -1,6 +1,7 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { gql, useQuery, useMutation } from '@apollo/client'
-import { LIST_OBJECTS } from '@/utils/FileUpload'
+import { useQuery, useMutation } from '@apollo/client'
+import { LIST_OBJECTS } from '@/queries/FileUpload'
+import { ALL_USERS_QUERY, CREATE_USER } from '@/queries/User'
 
 export function Description() {
   return (
@@ -75,7 +76,6 @@ export function Description() {
   )
 }
 
-
 function DisplayEcho() {
   const { loading, error, data } = useQuery(LIST_OBJECTS)
   if (loading) return <div>Loading...</div>
@@ -85,15 +85,6 @@ function DisplayEcho() {
 }
 
 function DisplayUsers() {
-  const ALL_USERS_QUERY = gql`
-    query ALL_USERS_QUERY {
-      allUsers {
-        id
-        email
-        registered_at
-      }
-    }
-  `
   const { loading, error, data } = useQuery(ALL_USERS_QUERY)
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
@@ -107,13 +98,6 @@ function DisplayUsers() {
 }
 
 function CreateUserComponent() {
-  const CREATE_USER = gql`
-    mutation CreateUser($user: CreateUserInput!) {
-      createUser(user: $user) {
-        email
-      }
-    }
-  `
   const [createUser] = useMutation(CREATE_USER)
   const handleCreateUser = () => {
     const options = {
