@@ -152,7 +152,6 @@ function FileUpload2() {
 
   useEffect(() => {
     if (loading || !data) return
-    console.log('data:', data)
     Object.keys(files).map((objectURL) => {
       const fileBlob = files[objectURL]
       const presignedUrl = data.createPresignedRequest.find((result) => result.fileName === fileBlob.name).presignedUrl

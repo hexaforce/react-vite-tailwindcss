@@ -1,6 +1,9 @@
 import { Description, Stacked, Form, Top, Contact, FlightPointMap, MediaLibrary, SignIn, NotFound, Slide, Products, Chat, FileUpload } from '@/views'
 import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
+import Calendar from '@/components/fullcalendar'
+
+
 import FileUpload2 from '@//views/FileUpload2'
 const subLayout = 'header'
 
@@ -26,6 +29,12 @@ export const navigation = [
     subLayout: 'none',
   },
   {
+    name: 'EventSchedule',
+    path: '/calendar',
+    element: <Calendar />,
+    subLayout: subLayout,
+  },
+  {
     name: 'MediaLibrary',
     path: '/media',
     element: <MediaLibrary />,
@@ -49,6 +58,7 @@ export const navigation = [
     element: <FileUpload2 />,
     subLayout: subLayout,
   },
+
 
   // {
   //   name: 'Products',
