@@ -1,18 +1,24 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { useQuery, useMutation } from '@apollo/client'
 import { LIST_OBJECTS } from '@/queries/FileUpload'
-import { ALL_USERS_QUERY, CREATE_USER } from '@/queries/User'
+import { USER_QUERY, ALL_USERS_QUERY, CREATE_USER_MUTATION, UPDATE_USER_MUTATION, DELETE_USER_MUTATION } from '@/queries/User'
+import { useState } from 'react'
 
 export function Description() {
+  
+  const [agreed, setAgreed] = useState(false)
+
   return (
     <div className='mx-auto max-w-2xl py-32 sm:py-48 lg:py-56'>
       <div className='px-4 sm:px-0'>
         <h3 className='text-base font-semibold leading-7 text-gray-900'>Applicant Information</h3>
         <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>Personal details and application.</p>
       </div>
-      <CreateUserComponent />
+      <button onClick={()=>setAgreed(true)}>Create User</button>
+      {agreed && <CreateUserComponent />}
+      
       {/* <DisplayEcho /> */}
-      <DisplayUsers />
+      {agreed && <DisplayUsers />}
       <div className='mt-6 border-t border-gray-100'>
         <dl className='divide-y divide-gray-100'>
           <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -98,7 +104,7 @@ function DisplayUsers() {
 }
 
 function CreateUserComponent() {
-  const [createUser] = useMutation(CREATE_USER)
+  const [createUser] = useMutation(CREATE_USER_MUTATION)
   const handleCreateUser = () => {
     const options = {
       variables: {
