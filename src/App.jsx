@@ -1,7 +1,7 @@
 import { MainLayout } from '@/layouts/MainLayout'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { findNavigation, navigation, userNavigation } from '@/navigation'
-import { FlightPointMap } from '@/views'
+import FlightPointMap from '@/views/FlightPointMap'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Loading } from '@/assets/Loading'
 
