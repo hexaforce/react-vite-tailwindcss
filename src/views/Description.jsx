@@ -1,21 +1,10 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { gql, useQuery } from '@apollo/client'
 
+import { LIST_OBJECTS } from '@/utils/FileUpload'
 function DisplayEcho() {
-  const listObjectsV2 = gql`
-    query listObjectsV2 {
-      listObjectsV2 {
-        Contents {
-          Key
-          LastModified
-          ETag
-          Size
-          StorageClass
-        }
-      }
-    }
-  `
-  const { loading, error, data } = useQuery(listObjectsV2)
+
+  const { loading, error, data } = useQuery(LIST_OBJECTS)
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
 

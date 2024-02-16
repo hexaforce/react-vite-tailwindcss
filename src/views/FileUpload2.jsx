@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import '@/assets/scss/FileUpload.scss'
 import PropTypes from 'prop-types'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 
-const fileSize = (size) => {
-  return size > 1024 ? (size > 1048576 ? Math.round(size / 1048576) + 'mb' : Math.round(size / 1024) + 'kb') : size + 'b'
-}
+import { uploadFileToS3, CREATE_PRESIGNED_REQUEST, fileSize } from '@/utils/FileUpload'
 
 ImageTemplate.propTypes = {
   objectURL: PropTypes.instanceOf(Blob).isRequired,
@@ -136,35 +134,11 @@ function FileUpload2() {
   const [submitClicked, setSubmitClicked] = useState(false)
   const [names, setNames] = useState([])
 
-  // const GET_POST_OBJECTS = gql`
-  //   query GetPostObjects($names: [String!]!) {
-  //     postObjectV4(names: $names) {
-  //       Objects {
-  //         action
-  //         method
-  //         enctype
-  //         acl
-  //         key
-  //         # xAmzCredential
-  //         # xAmzAlgorithm
-  //         # xAmzDate
-  //         # policy
-  //       }
-  //     }
-  //   }
-  // `
   // const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
   //   variables: { names },
   //   skip: !submitClicked,
   // })
-  const CREATE_PRESIGNED_REQUEST = gql`
-    query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
-      createPresignedRequest(fileNames: $fileNames, command: $command, expires: $expires) {
-        fileName
-        presignedUrl
-      }
-    }
-  `
+
   const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
     variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
     skip: !submitClicked,
@@ -174,28 +148,6 @@ function FileUpload2() {
     setSubmitClicked(true)
     setNames(Object.keys(files).map((objectURL) => files[objectURL].name))
     refetch()
-  }
-
-  async function uploadFileToS3(fileBlob, presignUrl) {
-    try {
-      const formData = new FormData()
-      formData.append('file', fileBlob)
-      formData.append('key', fileBlob.name)
-      const response = await fetch(presignUrl, {
-        method: 'POST',
-        body: formData,
-      })
-      if (!response.ok) {
-        var parser = new DOMParser()
-        var xmlDoc = parser.parseFromString(await response.text(), 'text/xml')
-        var code = xmlDoc.getElementsByTagName('Code')[0].textContent
-        var message = xmlDoc.getElementsByTagName('Message')[0].textContent
-        throw new Error(`Code: ${code} Message: ${message}`)
-      }
-      console.log('File uploaded successfully')
-    } catch (error) {
-      console.error(error.message)
-    }
   }
 
   useEffect(() => {
