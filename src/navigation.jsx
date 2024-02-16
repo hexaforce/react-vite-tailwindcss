@@ -1,9 +1,11 @@
-import { Description, Stacked, Contact, FlightPointMap, MediaLibrary,  NotFound, Chat } from '@/views'
+import { Description, Stacked, Contact, FlightPointMap, MediaLibrary, Form, NotFound, Chat } from '@/views'
 import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
 import Calendar from '@/components/fullcalendar'
 
-import FileUpload2 from '@//views/FileUpload2'
+import FileUpload2 from '@/views/FileUpload2'
+import Dialogs from '@/views/Dialogs'
+
 const subLayout = 'header'
 
 export const findNavigation = (pathname) => {
@@ -45,6 +47,12 @@ export const navigation = [
     element: <Chat />,
     subLayout: subLayout,
   },
+  // {
+  //   name: 'Dialogs',
+  //   path: '/dialogs',
+  //   element: <Dialogs />,
+  //   subLayout: subLayout,
+  // },
   {
     name: 'Description',
     path: '/description',
@@ -57,7 +65,7 @@ export const navigation = [
     element: <FileUpload2 />,
     subLayout: subLayout,
   },
-// mysqldump -h 127.0.0.1 -u fpv_v2008 -p -P 3307 fpv_v2008 --no-data > dumpfile.sql
+  // mysqldump -h 127.0.0.1 -u fpv_v2008 -p -P 3307 fpv_v2008 --no-data > dumpfile.sql
   // {
   //   name: 'Products',
   //   path: '/products',
@@ -71,12 +79,12 @@ export const navigation = [
   //   element: <Stacked />,
   //   subLayout: subLayout,
   // },
-  // {
-  //   name: 'Form',
-  //   path: '/form',
-  //   element: <Form />,
-  //   subLayout: subLayout,
-  // },
+  {
+    name: 'Form',
+    path: '/form',
+    element: <Form />,
+    subLayout: subLayout,
+  },
   // {
   //   name: 'Top',
   //   path: '/top',

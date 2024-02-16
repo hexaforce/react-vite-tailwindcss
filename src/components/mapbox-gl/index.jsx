@@ -11,7 +11,7 @@ const data = [
     content: 'ここは何ですか？',
   },
   {
-    id: 3,
+    id: 0,
     latitude: 35.7050639,
     longitude: 139.7690916,
     src: 'https://placekitten.com/50/50',
@@ -52,7 +52,7 @@ export default function MapBox() {
         longitude: 139.7690916,
         zoom: 16,
       }}
-      style={{ width: '100%', height: 545 }}
+      style={{ width: '100%', height: '80vh'}}
       mapStyle='mapbox://styles/mapbox/streets-v11'
       // mapStyle='mapbox://styles/mapbox/satellite-v9'
       // mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}

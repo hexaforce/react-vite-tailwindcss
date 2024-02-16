@@ -13,7 +13,7 @@ MainLayout.propTypes = {
 
 export function MainLayout({ children, currentNav }) {
   return (
-    <div className='min-h-full bg-white'>
+    <div className='h-screen bg-white'>
       <MainHeader currentPath={currentNav.path} />
       {currentNav.subLayout === 'header' && (
         <header>
