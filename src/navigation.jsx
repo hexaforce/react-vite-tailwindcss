@@ -1,8 +1,7 @@
-import { Description, Stacked, Form, Top, Contact, FlightPointMap, MediaLibrary, SignIn, NotFound, Slide, Products, Chat, FileUpload } from '@/views'
+import { Description, Stacked, Contact, FlightPointMap, MediaLibrary,  NotFound, Chat } from '@/views'
 import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
 import Calendar from '@/components/fullcalendar'
-
 
 import FileUpload2 from '@//views/FileUpload2'
 const subLayout = 'header'
@@ -36,9 +35,15 @@ export const navigation = [
   },
   {
     name: 'MediaLibrary',
-    path: '/media',
+    path: '/movie',
     element: <MediaLibrary />,
     subLayout: 'none',
+  },
+  {
+    name: 'OpenChat',
+    path: '/chat',
+    element: <Chat />,
+    subLayout: subLayout,
   },
   {
     name: 'Description',
@@ -47,19 +52,12 @@ export const navigation = [
     subLayout: subLayout,
   },
   {
-    name: 'Chat',
-    path: '/chat',
-    element: <Chat />,
-    subLayout: subLayout,
-  },
-  {
     name: 'FileUpload',
     path: '/fileUpload',
     element: <FileUpload2 />,
     subLayout: subLayout,
   },
-
-
+// mysqldump -h 127.0.0.1 -u fpv_v2008 -p -P 3307 fpv_v2008 --no-data > dumpfile.sql
   // {
   //   name: 'Products',
   //   path: '/products',

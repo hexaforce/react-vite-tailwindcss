@@ -1,15 +1,6 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { gql, useQuery } from '@apollo/client'
-
+import { gql, useQuery, useMutation } from '@apollo/client'
 import { LIST_OBJECTS } from '@/utils/FileUpload'
-function DisplayEcho() {
-
-  const { loading, error, data } = useQuery(LIST_OBJECTS)
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
-
-  return <pre>{JSON.stringify(data?.listObjectsV2.Contents, null, 2)}</pre>
-}
 
 export function Description() {
   return (
@@ -18,8 +9,9 @@ export function Description() {
         <h3 className='text-base font-semibold leading-7 text-gray-900'>Applicant Information</h3>
         <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>Personal details and application.</p>
       </div>
-      <DisplayEcho />
-      {/* <DisplayUsers /> */}
+      <CreateUserComponent />
+      {/* <DisplayEcho /> */}
+      <DisplayUsers />
       <div className='mt-6 border-t border-gray-100'>
         <dl className='divide-y divide-gray-100'>
           <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -83,9 +75,18 @@ export function Description() {
   )
 }
 
+
+function DisplayEcho() {
+  const { loading, error, data } = useQuery(LIST_OBJECTS)
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+
+  return <pre>{JSON.stringify(data?.listObjectsV2.Contents, null, 2)}</pre>
+}
+
 function DisplayUsers() {
   const ALL_USERS_QUERY = gql`
-    query AllUsers {
+    query ALL_USERS_QUERY {
       allUsers {
         id
         email
@@ -103,4 +104,29 @@ function DisplayUsers() {
       <p>Registered At: {registered_at}</p>
     </div>
   ))
+}
+
+function CreateUserComponent() {
+  const CREATE_USER = gql`
+    mutation CreateUser($user: CreateUserInput!) {
+      createUser(user: $user) {
+        email
+      }
+    }
+  `
+  const [createUser] = useMutation(CREATE_USER)
+  const handleCreateUser = () => {
+    const options = {
+      variables: {
+        user: {
+          email: 'example@example.com',
+          password: 'password123',
+        },
+      },
+    }
+    createUser(options)
+      .then((response) => console.log('response:', response.data))
+      .catch((error) => console.log('error:', error))
+  }
+  return <button onClick={handleCreateUser}>Create User</button>
 }
