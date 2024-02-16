@@ -1,7 +1,17 @@
 import { gql } from '@apollo/client'
 
+const USER_QUERY = gql`
+  query UserQuery($id: ID!) {
+    user(id: $id) {
+      id
+      email
+      registered_at
+    }
+  }
+`
+
 const ALL_USERS_QUERY = gql`
-  query ALL_USERS_QUERY {
+  query AllUserQuery {
     allUsers {
       id
       email
@@ -10,11 +20,34 @@ const ALL_USERS_QUERY = gql`
   }
 `
 
-const CREATE_USER = gql`
-  mutation CreateUser($user: CreateUserInput!) {
+const CREATE_USER_MUTATION = gql`
+  mutation CreateUserMutation($user: CreateUserInput!) {
     createUser(user: $user) {
+      id
       email
+      registered_at
     }
   }
 `
-export { ALL_USERS_QUERY, CREATE_USER }
+
+const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUserMutation($user: UpdateUserInput!) {
+    updateUser(user: $user) {
+      id
+      email
+      registered_at
+    }
+  }
+`
+
+const DELETE_USER_MUTATION = gql`
+  mutation DeleteUserMutation($id: ID!) {
+    deleteUser(id: $id) {
+      id
+      email
+      registered_at
+    }
+  }
+`
+
+export { USER_QUERY, ALL_USERS_QUERY, CREATE_USER_MUTATION, UPDATE_USER_MUTATION, DELETE_USER_MUTATION }
