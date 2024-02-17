@@ -5,7 +5,6 @@ import { USER_QUERY, ALL_USERS_QUERY, CREATE_USER_MUTATION, UPDATE_USER_MUTATION
 import { useState } from 'react'
 
 export function Description() {
-  
   const [agreed, setAgreed] = useState(false)
 
   return (
@@ -14,9 +13,9 @@ export function Description() {
         <h3 className='text-base font-semibold leading-7 text-gray-900'>Applicant Information</h3>
         <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>Personal details and application.</p>
       </div>
-      <button onClick={()=>setAgreed(true)}>Create User</button>
+      <button onClick={() => setAgreed(true)}>Create User</button>
       {agreed && <CreateUserComponent />}
-      
+
       {/* <DisplayEcho /> */}
       {agreed && <DisplayUsers />}
       <div className='mt-6 border-t border-gray-100'>

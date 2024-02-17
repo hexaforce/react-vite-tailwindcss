@@ -1,11 +1,10 @@
-import { Description, Stacked, Contact,  MediaLibrary, Form, NotFound, Chat } from '@/views'
+import { Description, Stacked, Contact, MediaLibrary, Form, NotFound, Chat } from '@/views'
 import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
 import Calendar from '@/components/fullcalendar'
 
 import FileUpload2 from '@/views/FileUpload2'
 import Dialogs from '@/views/Dialogs'
-
 
 import FlightPointMap from '@/views/FlightPointMap'
 

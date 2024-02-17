@@ -26,7 +26,7 @@ export default function Calendar() {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        allDay: selectInfo.allDay
+        allDay: selectInfo.allDay,
       })
     }
   }
@@ -53,7 +53,7 @@ export default function Calendar() {
   const renderSidebarEvent = (event) => {
     return (
       <li key={event.id}>
-        <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+        <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
         <i>{event.title}</i>
       </li>
     )
@@ -72,19 +72,13 @@ export default function Calendar() {
         </div>
         <div className='demo-app-sidebar-section'>
           <label>
-            <input
-              type='checkbox'
-              checked={weekendsVisible}
-              onChange={handleWeekendsToggle}
-            ></input>
+            <input type='checkbox' checked={weekendsVisible} onChange={handleWeekendsToggle}></input>
             toggle weekends
           </label>
         </div>
         <div className='demo-app-sidebar-section'>
           <h2>All Events ({currentEvents.length})</h2>
-          <ul>
-            {currentEvents.map(renderSidebarEvent)}
-          </ul>
+          <ul>{currentEvents.map(renderSidebarEvent)}</ul>
         </div>
       </div>
       <div className='demo-app-main'>
@@ -93,7 +87,7 @@ export default function Calendar() {
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
           }}
           initialView='dayGridMonth'
           editable={true}

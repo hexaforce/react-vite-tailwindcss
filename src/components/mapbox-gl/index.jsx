@@ -34,7 +34,7 @@ const data = [
 ]
 
 export default function MapBox(props) {
-  const { editMode, selectPoint, setSelectPoint,setOpen } = props
+  const { editMode, selectPoint, setSelectPoint, setOpen } = props
   const [markerInfo, setMarkerInfo] = useState(null)
 
   const MarkerClick = (latitude, longitude) => {
@@ -76,7 +76,7 @@ export default function MapBox(props) {
         })}
       {editMode && selectPoint && (
         <Popup latitude={selectPoint.latitude} longitude={selectPoint.longitude} closeButton={false} closeOnClick={false} onClose={() => setSelectPoint(null)}>
-          <div onClick={()=>setOpen(true)}>ここに追加</div>
+          <div onClick={() => setOpen(true)}>ここに追加</div>
         </Popup>
       )}
       {!editMode && markerInfo && (
