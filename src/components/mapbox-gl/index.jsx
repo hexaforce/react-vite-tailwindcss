@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Map, { Marker, Popup } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import PropTypes from 'prop-types'
 
 const data = [
   {
@@ -32,6 +33,16 @@ const data = [
     content: 'ここは何ですか？',
   },
 ]
+
+MapBox.propTypes = {
+  editMode: PropTypes.bool.isRequired,
+  selectPoint: PropTypes.shape({
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+  }).isRequired,
+  setSelectPoint: PropTypes.func.isRequired,
+  setOpen: PropTypes.func.isRequired,
+}
 
 export default function MapBox(props) {
   const { editMode, selectPoint, setSelectPoint, setOpen } = props
