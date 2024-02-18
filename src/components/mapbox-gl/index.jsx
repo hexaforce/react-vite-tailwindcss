@@ -2,37 +2,9 @@ import { useState } from 'react'
 import Map, { Marker, Popup } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import PropTypes from 'prop-types'
+import { useQuery } from '@apollo/client'
 
-const data = [
-  {
-    id: 1,
-    latitude: 35.7030639,
-    longitude: 139.7690916,
-    src: 'https://placekitten.com/50/50',
-    content: 'ここは何ですか？',
-  },
-  {
-    id: 0,
-    latitude: 35.7050639,
-    longitude: 139.7690916,
-    src: 'https://placekitten.com/50/50',
-    content: 'ここは何ですか？',
-  },
-  {
-    id: 2,
-    latitude: 35.7030639,
-    longitude: 139.7660916,
-    src: 'https://placekitten.com/50/50',
-    content: 'ここは何ですか？',
-  },
-  {
-    id: 3,
-    latitude: 35.7050639,
-    longitude: 139.7660916,
-    src: 'https://placekitten.com/50/50',
-    content: 'ここは何ですか？',
-  },
-]
+import { ALL_FLIGHT_POINTS_QUERY } from '@/queries/FlightPoint'
 
 MapBox.propTypes = {
   editMode: PropTypes.bool.isRequired,
@@ -41,21 +13,32 @@ MapBox.propTypes = {
     longitude: PropTypes.number.isRequired,
   }),
   setSelectPoint: PropTypes.func.isRequired,
+
+  markerInfo: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    create_user: PropTypes.string.isRequired,
+    marker_image: PropTypes.string.isRequired,
+    registered_at: PropTypes.string.isRequired,
+  }),
+  setMarkerInfo: PropTypes.func.isRequired,
   setOpen: PropTypes.func.isRequired,
 }
 
 export default function MapBox(props) {
-  const { editMode, selectPoint, setSelectPoint, setOpen } = props
-  const [markerInfo, setMarkerInfo] = useState(null)
+  const { editMode, selectPoint, setSelectPoint,markerInfo, setMarkerInfo, setOpen } = props
 
-  const MarkerClick = (latitude, longitude) => {
+
+  const markerSelect = (d) => {
     setMarkerInfo(null)
-    setMarkerInfo({
-      latitude: latitude,
-      longitude: longitude,
-      content: 'ここは何ですか？',
-    })
+    setMarkerInfo(d)
   }
+
+  const { loading, error, data } = useQuery(ALL_FLIGHT_POINTS_QUERY)
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
 
   return (
     <Map
@@ -78,13 +61,14 @@ export default function MapBox(props) {
       }}
     >
       {!editMode &&
-        data.map((d) => {
+        data?.allFlightPoints.map((d) => {
           return (
             <Marker key={d.id} draggable latitude={d.latitude} longitude={d.longitude}>
-              <img style={{ display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }} src={d.src} alt='Marker' onClick={() => MarkerClick(d.latitude, d.longitude)} />
+              <img style={{ display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }} src='https://placekitten.com/50/50' alt='Marker' onClick={() => markerSelect(d)} />
             </Marker>
           )
         })}
+
       {editMode && selectPoint && (
         <Popup latitude={selectPoint.latitude} longitude={selectPoint.longitude} closeButton={false} closeOnClick={false} onClose={() => setSelectPoint(null)}>
           <button type='button' onClick={() => setOpen(true)} className='rounded-md bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>

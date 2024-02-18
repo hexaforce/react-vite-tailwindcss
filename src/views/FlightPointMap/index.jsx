@@ -10,6 +10,7 @@ import PointForm from '@/views/FlightPointMap/PointForm'
 export default function FlightPointMap() {
   const [editMode, setEditMode] = useState(false)
   const [selectPoint, setSelectPoint] = useState(null)
+  const [markerInfo, setMarkerInfo] = useState(null)
 
   const [open, setOpen] = useState(false)
 
@@ -19,8 +20,8 @@ export default function FlightPointMap() {
   }
 
   const [formData, setFormData] = useState({
-    latitude: 0.0000,
-    longitude: 0.0000,
+    latitude: 0.0,
+    longitude: 0.0,
     title: '',
     markerImage: null,
   })
@@ -33,7 +34,7 @@ export default function FlightPointMap() {
   return (
     <div className='bg-white px-4 lg:px-0'>
       <div className='lg:flex lg:items-center lg:justify-between'>
-        <PointInfo editMode={editMode} />
+        <PointInfo editMode={editMode} markerInfo={markerInfo}/>
         <div className='mt-3 flex lg:ml-4 lg:mt-0'>
           <span className='hidden sm:block'>
             {editMode ? (
@@ -75,7 +76,7 @@ export default function FlightPointMap() {
         </div>
       </div>
       <div className='mx-auto max-w-7xl py-3'>
-        <MapBox editMode={editMode} selectPoint={selectPoint} setSelectPoint={setSelectPoint} setOpen={setOpen} />
+        <MapBox editMode={editMode} selectPoint={selectPoint} setSelectPoint={setSelectPoint} markerInfo={markerInfo} setMarkerInfo={setMarkerInfo} setOpen={setOpen} />
       </div>
       <PointForm open={open} setOpen={setOpen} formData={formData} setFormData={setFormData} />
     </div>
