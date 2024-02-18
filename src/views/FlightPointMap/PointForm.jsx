@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CameraIcon, PhotoIcon } from '@heroicons/react/24/solid'
 import PropTypes from 'prop-types'
@@ -6,19 +6,20 @@ import PropTypes from 'prop-types'
 PointForm.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
+  formData: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+    title: PropTypes.string,
+    markerimage: PropTypes.instanceOf(Blob),
+  }).isRequired,
+  setFormData: PropTypes.func.isRequired,
 }
 
 export default function PointForm(props) {
-  const { open, setOpen } = props
+  const { open, setOpen,formData, setFormData} = props
 
   const cancelButtonRef = useRef(null)
 
-  const [formData, setFormData] = useState({
-    latitude: '',
-    longitude: '',
-    title: '',
-    markerimage: null,
-  })
   const inputChange = (event) => {
     const { name, value } = event.target
     setFormData({ ...formData, [name]: value })

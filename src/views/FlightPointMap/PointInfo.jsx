@@ -5,13 +5,6 @@ import PropTypes from 'prop-types'
 
 PointInfo.propTypes = {
   editMode: PropTypes.bool.isRequired,
-  // children: PropTypes.node,
-  // currentNav: PropTypes.shape({
-  //   name: PropTypes.string.isRequired,
-  //   path: PropTypes.string.isRequired,
-  //   element: PropTypes.element.isRequired,
-  //   subLayout: PropTypes.string.isRequired,
-  // }).isRequired,
 }
 
 export default function PointInfo(props) {

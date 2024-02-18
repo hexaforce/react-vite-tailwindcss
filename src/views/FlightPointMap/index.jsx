@@ -1,5 +1,5 @@
-import { Fragment, useState } from 'react'
-import { CheckIcon, ChevronDownIcon, PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { Fragment, useState, useEffect } from 'react'
+import { ChevronDownIcon, PencilSquareIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@/utils'
 
@@ -17,6 +17,18 @@ export default function FlightPointMap() {
     setEditMode(!editMode)
     editMode && setSelectPoint(null)
   }
+
+  const [formData, setFormData] = useState({
+    latitude: 0.0000,
+    longitude: 0.0000,
+    title: '',
+    markerimage: null,
+  })
+
+  useEffect(() => {
+    if (!selectPoint) return
+    setFormData({ ...formData, latitude: selectPoint.latitude, longitude: selectPoint.longitude })
+  }, [selectPoint])
 
   return (
     <div className='bg-white px-4 lg:px-0'>
@@ -65,7 +77,7 @@ export default function FlightPointMap() {
       <div className='mx-auto max-w-7xl py-3'>
         <MapBox editMode={editMode} selectPoint={selectPoint} setSelectPoint={setSelectPoint} setOpen={setOpen} />
       </div>
-      <PointForm open={open} setOpen={setOpen} />
+      <PointForm open={open} setOpen={setOpen} formData={formData} setFormData={setFormData} />
     </div>
   )
 }
