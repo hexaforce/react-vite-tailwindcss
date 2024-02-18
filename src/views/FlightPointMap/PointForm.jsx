@@ -13,7 +13,7 @@ PointForm.propTypes = {
     latitude: PropTypes.number,
     longitude: PropTypes.number,
     title: PropTypes.string,
-    markerimage: PropTypes.instanceOf(Blob),
+    markerImage: PropTypes.instanceOf(Blob),
   }).isRequired,
   setFormData: PropTypes.func.isRequired,
 }
@@ -30,26 +30,40 @@ export default function PointForm(props) {
   }
 
   function fileInputChange(event) {
-    setFormData({ ...formData, markerimage: event.target.files[0] })
+    setFormData({ ...formData, markerImage: event.target.files[0] })
   }
 
   const [createFlightPoint] = useMutation(CREATE_FLIGHT_POINT_MUTATION)
-  const onSubmit = (event) => {
+
+  const onSubmit = async (event) => {
     event.preventDefault()
-    console.log('Form submitted with data:', formData)
-    console.log('Form submitted with data:', user)
-      const options = {
-        variables: {
-          flightpoint: {
-            email: 'example@example.com',
-            password: 'password123',
-          },
-        },
+
+    try {
+      const wasabi = new FormData()
+      wasabi.append('file', formData.markerImage)
+      wasabi.append('bucket', 'fpv-japan-public')
+      wasabi.append('user_email', user.email)
+      const response = await fetch('http://localhost:8001/api/wasabi', {
+        method: 'POST',
+        body: wasabi,
+      })
+      if (response.ok) {
+        const data = await response.json()
+        const flightPoint = {
+          latitude: formData.latitude,
+          longitude: formData.longitude,
+          title: formData.title,
+          create_user: user.email,
+          marker_image: data.ObjectURL,
+        }
+        createFlightPoint({ variables: { flightPoint } })
+          .then((response) => console.log('response:', response.data))
+          .catch((error) => console.log('error:', error))
+        setOpen(false)
       }
-      createFlightPoint(options)
-        .then((response) => console.log('response:', response.data))
-        .catch((error) => console.log('error:', error))
-    setOpen(false)
+    } catch (error) {
+      console.error(error.message)
+    }
   }
 
   return (
@@ -88,11 +102,11 @@ export default function PointForm(props) {
                         <div className='col-span-full'>
                           <label className='block text-sm font-medium leading-6 text-gray-900'>
                             マーカー画像
-                            {formData.markerimage ? (
+                            {formData.markerImage ? (
                               <img
                                 // style={{ objectFit:'cover',width: 50, height: 50, display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }}
-                                src={URL.createObjectURL(formData.markerimage)}
-                                alt={formData.markerimage.name}
+                                src={URL.createObjectURL(formData.markerImage)}
+                                alt={formData.markerImage.name}
                                 className='img-preview sticky h-12 w-12 rounded-full bg-fixed object-cover'
                               />
                             ) : (
@@ -103,9 +117,9 @@ export default function PointForm(props) {
                             <div className='text-center'>
                               <PhotoIcon className='mx-auto h-12 w-12 text-gray-300' aria-hidden='true' />
                               <div className='mt-4 flex text-sm leading-6 text-gray-600'>
-                                <label htmlFor='markerimage' className='relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500'>
+                                <label htmlFor='markerImage' className='relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500'>
                                   <span>画像ファイルをアップロード</span>
-                                  <input type='file' id='markerimage' name='markerimage' onChange={fileInputChange} className='sr-only' />
+                                  <input type='file' id='markerImage' name='markerImage' onChange={fileInputChange} className='sr-only' />
                                 </label>
                                 <p className='pl-1'>するかここにドラッグ&ドロップ</p>
                               </div>

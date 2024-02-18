@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 const FLIGHT_POINT_QUERY = gql`
   query FlightPointQuery($id: ID!) {
-    flightpoint(id: $id) {
+    flightPoint(id: $id) {
       id
       email
       registered_at
@@ -21,18 +21,22 @@ const ALL_FLIGHT_POINTS_QUERY = gql`
 `
 
 const CREATE_FLIGHT_POINT_MUTATION = gql`
-  mutation CreateFlightPointMutation($flightpoint: CreateFlightPointInput!) {
-    createFlightPoint(flightpoint: $flightpoint) {
+  mutation CreateFlightPointMutation($flightPoint: CreateFlightPointInput!) {
+    createFlightPoint(flightPoint: $flightPoint) {
       id
-      email
+      latitude
+      longitude
+      title
+      create_user
+      marker_image
       registered_at
     }
   }
 `
 
 const UPDATE_FLIGHT_POINT_MUTATION = gql`
-  mutation UpdateFlightPointMutation($flightpoint: UpdateFlightPointInput!) {
-    updateFlightPoint(flightpoint: $flightpoint) {
+  mutation UpdateFlightPointMutation($flightPoint: UpdateFlightPointInput!) {
+    updateFlightPoint(flightPoint: $flightPoint) {
       id
       email
       registered_at

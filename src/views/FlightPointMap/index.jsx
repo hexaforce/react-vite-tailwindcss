@@ -22,7 +22,7 @@ export default function FlightPointMap() {
     latitude: 0.0000,
     longitude: 0.0000,
     title: '',
-    markerimage: null,
+    markerImage: null,
   })
 
   useEffect(() => {
