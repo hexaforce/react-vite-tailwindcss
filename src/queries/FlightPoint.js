@@ -4,7 +4,11 @@ const FLIGHT_POINT_QUERY = gql`
   query FlightPointQuery($id: ID!) {
     flightPoint(id: $id) {
       id
-      email
+      latitude
+      longitude
+      title
+      create_user
+      marker_image
       registered_at
     }
   }
@@ -14,15 +18,19 @@ const ALL_FLIGHT_POINTS_QUERY = gql`
   query AllFlightPointQuery {
     allFlightPoints {
       id
-      email
+      latitude
+      longitude
+      title
+      create_user
+      marker_image
       registered_at
     }
   }
 `
 
 const CREATE_FLIGHT_POINT_MUTATION = gql`
-  mutation CreateFlightPointMutation($flightPoint: CreateFlightPointInput!) {
-    createFlightPoint(flightPoint: $flightPoint) {
+  mutation CreateFlightPointMutation($createFlightPointInput: CreateFlightPointInput!) {
+    createFlightPoint(createFlightPointInput: $createFlightPointInput) {
       id
       latitude
       longitude
@@ -38,7 +46,11 @@ const UPDATE_FLIGHT_POINT_MUTATION = gql`
   mutation UpdateFlightPointMutation($flightPoint: UpdateFlightPointInput!) {
     updateFlightPoint(flightPoint: $flightPoint) {
       id
-      email
+      latitude
+      longitude
+      title
+      create_user
+      marker_image
       registered_at
     }
   }
@@ -48,7 +60,11 @@ const DELETE_FLIGHT_POINT_MUTATION = gql`
   mutation DeleteFlightPointMutation($id: ID!) {
     deleteFlightPoint(id: $id) {
       id
-      email
+      latitude
+      longitude
+      title
+      create_user
+      marker_image
       registered_at
     }
   }

@@ -49,14 +49,14 @@ export default function PointForm(props) {
       })
       if (response.ok) {
         const data = await response.json()
-        const flightPoint = {
+        const createFlightPointInput = {
           latitude: formData.latitude,
           longitude: formData.longitude,
           title: formData.title,
           create_user: user.email,
           marker_image: data.ObjectURL,
         }
-        createFlightPoint({ variables: { flightPoint } })
+        createFlightPoint({ variables: { createFlightPointInput } })
           .then((response) => console.log('response:', response.data))
           .catch((error) => console.log('error:', error))
         setOpen(false)
