@@ -39,7 +39,7 @@ MapBox.propTypes = {
   selectPoint: PropTypes.shape({
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired,
-  }).isRequired,
+  }),
   setSelectPoint: PropTypes.func.isRequired,
   setOpen: PropTypes.func.isRequired,
 }
@@ -66,7 +66,7 @@ export default function MapBox(props) {
       }}
       style={{ width: '100%', height: '80vh' }}
       mapStyle='mapbox://styles/mapbox/streets-v11'
-      // mapStyle='mapbox://styles/mapbox/satellite-v9'
+      // mapStyle='mapbox://styles/mapbox/satellite-v11'
       // mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
       mapboxAccessToken='pk.eyJ1IjoicmVsaWNzOSIsImEiOiJjbHMzNHlwbDIwNDczMmtvM2xhNWR0ZzVtIn0.whCzeh6XW7ju4Ja6DR0imw'
       onClick={(event) => {
@@ -87,7 +87,9 @@ export default function MapBox(props) {
         })}
       {editMode && selectPoint && (
         <Popup latitude={selectPoint.latitude} longitude={selectPoint.longitude} closeButton={false} closeOnClick={false} onClose={() => setSelectPoint(null)}>
-          <div onClick={() => setOpen(true)}>ここに追加</div>
+          <button type='button' onClick={() => setOpen(true)} className='rounded-md bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
+            ここに追加
+          </button>
         </Popup>
       )}
       {!editMode && markerInfo && (
