@@ -2,6 +2,9 @@ import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CameraIcon, PhotoIcon } from '@heroicons/react/24/solid'
 import PropTypes from 'prop-types'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useMutation } from '@apollo/client'
+import { CREATE_FLIGHT_POINT_MUTATION } from '@/queries/FlightPoint'
 
 PointForm.propTypes = {
   open: PropTypes.bool.isRequired,
@@ -16,7 +19,8 @@ PointForm.propTypes = {
 }
 
 export default function PointForm(props) {
-  const { open, setOpen,formData, setFormData} = props
+  const { user } = useAuth0()
+  const { open, setOpen, formData, setFormData } = props
 
   const cancelButtonRef = useRef(null)
 
@@ -29,9 +33,22 @@ export default function PointForm(props) {
     setFormData({ ...formData, markerimage: event.target.files[0] })
   }
 
+  const [createFlightPoint] = useMutation(CREATE_FLIGHT_POINT_MUTATION)
   const onSubmit = (event) => {
     event.preventDefault()
     console.log('Form submitted with data:', formData)
+    console.log('Form submitted with data:', user)
+      const options = {
+        variables: {
+          flightpoint: {
+            email: 'example@example.com',
+            password: 'password123',
+          },
+        },
+      }
+      createFlightPoint(options)
+        .then((response) => console.log('response:', response.data))
+        .catch((error) => console.log('error:', error))
     setOpen(false)
   }
 
@@ -75,7 +92,8 @@ export default function PointForm(props) {
                               <img
                                 // style={{ objectFit:'cover',width: 50, height: 50, display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }}
                                 src={URL.createObjectURL(formData.markerimage)}
-                                alt={formData.markerimage.name} className='img-preview sticky h-12 w-12 rounded-full bg-fixed object-cover'
+                                alt={formData.markerimage.name}
+                                className='img-preview sticky h-12 w-12 rounded-full bg-fixed object-cover'
                               />
                             ) : (
                               <CameraIcon className='h-12 w-12 text-gray-300' aria-hidden='true' />
