@@ -2,9 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ApolloProviderWithAuth0 } from '@/components/ApolloProviderWithAuth0'
-
 import { Auth0Provider } from '@auth0/auth0-react'
-
 import App from '@/App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(

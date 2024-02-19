@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useMutation } from '@apollo/client'
 import { CREATE_FLIGHT_POINT_MUTATION } from '@/queries/FlightPoint'
+import { uploadFileToS3 } from '@/queries/FileUpload'
 
 PointForm.propTypes = {
   open: PropTypes.bool.isRequired,
@@ -19,7 +20,7 @@ PointForm.propTypes = {
 }
 
 export default function PointForm(props) {
-  const { user } = useAuth0()
+  const { user, getIdTokenClaims } = useAuth0()
   const { open, setOpen, formData, setFormData } = props
 
   const cancelButtonRef = useRef(null)
@@ -37,30 +38,19 @@ export default function PointForm(props) {
 
   const onSubmit = async (event) => {
     event.preventDefault()
-
+    const token = (await getIdTokenClaims()).__raw
+    const data = await uploadFileToS3(token, 'fpv-japan-public', formData.markerImage)
+    const createFlightPointInput = {
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+      title: formData.title,
+      marker_image: data.ObjectURL,
+    }
     try {
-      const wasabi = new FormData()
-      wasabi.append('file', formData.markerImage)
-      wasabi.append('bucket', 'fpv-japan-public')
-      wasabi.append('user_email', user.email)
-      const response = await fetch('http://localhost:8001/api/wasabi', {
-        method: 'POST',
-        body: wasabi,
-      })
-      if (response.ok) {
-        const data = await response.json()
-        const createFlightPointInput = {
-          latitude: formData.latitude,
-          longitude: formData.longitude,
-          title: formData.title,
-          create_user: user.email,
-          marker_image: data.ObjectURL,
-        }
-        createFlightPoint({ variables: { createFlightPointInput } })
-          .then((response) => console.log('response:', response.data))
-          .catch((error) => console.log('error:', error))
-        setOpen(false)
-      }
+      createFlightPoint({ variables: { createFlightPointInput } })
+        .then((response) => console.log('response:', response.data))
+        .catch((error) => console.log('error:', error))
+      setOpen(false)
     } catch (error) {
       console.error(error.message)
     }

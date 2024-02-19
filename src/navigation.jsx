@@ -3,7 +3,8 @@ import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
 import Calendar from '@/components/fullcalendar'
 
-import FileUpload2 from '@/views/FileUpload2'
+// import FileUpload2 from '@/views/FileUpload2'
+import FileUpload from '@/views/FileUpload'
 import Dialogs from '@/views/Dialogs'
 import MediaLibrary from '@/views/MediaLibrary'
 
@@ -65,7 +66,7 @@ export const navigation = [
   {
     name: 'FileUpload',
     path: '/fileUpload',
-    element: <FileUpload2 />,
+    element: <FileUpload />,
     subLayout: subLayout,
   },
   // mysqldump -h 127.0.0.1 -u fpv_v2008 -p -P 3307 fpv_v2008 --no-data > dumpfile.sql

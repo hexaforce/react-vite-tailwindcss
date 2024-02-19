@@ -44,7 +44,7 @@ const CREATE_PRESIGNED_REQUEST = gql`
     }
   }
 `
-async function uploadFileToS3(fileBlob, presignUrl) {
+async function uploadPresignedUrl(token, fileBlob, presignUrl) {
   try {
     const formData = new FormData()
     formData.append('file', fileBlob)
@@ -52,6 +52,7 @@ async function uploadFileToS3(fileBlob, presignUrl) {
     const response = await fetch(presignUrl, {
       method: 'POST',
       body: formData,
+      headers: { Authorization: `Bearer ${token}` },
     })
     if (!response.ok) {
       var parser = new DOMParser()
@@ -66,8 +67,26 @@ async function uploadFileToS3(fileBlob, presignUrl) {
   }
 }
 
+async function uploadFileToS3(token, bucket, fileBlob) {
+  try {
+    const wasabi = new FormData()
+    wasabi.append('bucket', bucket)
+    wasabi.append('file', fileBlob)
+    const response = await fetch('http://localhost:8001/api/wasabi', {
+      method: 'POST',
+      body: wasabi,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (response.ok) {
+      return await response.json()
+    }
+  } catch (error) {
+    console.error(error.message)
+  }
+}
+
 const fileSize = (size) => {
   return size > 1024 ? (size > 1048576 ? Math.round(size / 1048576) + 'mb' : Math.round(size / 1024) + 'kb') : size + 'b'
 }
 
-export { GET_POST_OBJECTS, CREATE_PRESIGNED_REQUEST, LIST_OBJECTS, uploadFileToS3, fileSize }
+export { GET_POST_OBJECTS, CREATE_PRESIGNED_REQUEST, LIST_OBJECTS, uploadFileToS3, uploadPresignedUrl, fileSize }
