@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 const LIST_OBJECTS = gql`
-  query ListObjects {
-    listObjectsV2 {
+  query ListObjects($Name: String!, $Marker: Int!, $MaxKeys: Int!) {
+    listObjectsV2(Name: $Name, Marker: $Marker, MaxKeys: $MaxKeys) {
       Contents {
         Key
         LastModified
@@ -10,6 +10,10 @@ const LIST_OBJECTS = gql`
         Size
         StorageClass
       }
+      Name
+      Prefix
+      MaxKeys
+      KeyCount
     }
   }
 `

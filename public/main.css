@@ -1116,6 +1116,10 @@ select {
   height: 100vh;
 }
 
+.h-40 {
+  height: 10rem;
+}
+
 .max-h-full {
   max-height: 100%;
 }
@@ -1198,6 +1202,10 @@ select {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-60 {
+  width: 15rem;
 }
 
 .min-w-0 {
@@ -1847,6 +1855,11 @@ select {
 .py-9 {
   padding-top: 2.25rem;
   padding-bottom: 2.25rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .pb-10 {
@@ -2726,6 +2739,16 @@ select {
     padding-bottom: 3rem;
   }
 
+  .sm\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .sm\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
   .sm\:pb-4 {
     padding-bottom: 1rem;
   }
@@ -2825,12 +2848,20 @@ select {
     height: 100%;
   }
 
+  .lg\:h-40 {
+    height: 10rem;
+  }
+
   .lg\:w-1\/6 {
     width: 16.666667%;
   }
 
   .lg\:w-full {
     width: 100%;
+  }
+
+  .lg\:w-60 {
+    width: 15rem;
   }
 
   .lg\:max-w-7xl {
