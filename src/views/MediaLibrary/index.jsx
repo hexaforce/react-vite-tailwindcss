@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
-import { LIST_OBJECTS, ALL_MEDIA_LIBRARY_QUERY } from '@/queries/FileUpload'
+import { LIST_OBJECTS } from '@/queries/FileUpload'
+import { ALL_MEDIA_LIBRARY_QUERY } from '@/queries/MediaLibrary'
 
 const products = [
   {

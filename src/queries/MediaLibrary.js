@@ -24,8 +24,8 @@ const ASSETS_QUERY = gql`
 `
 
 const ALL_MEDIA_LIBRARY_QUERY = gql`
-  query AllMediaLibraryQuery {
-    allMediaLibrarys {
+  query AllMediaLibrariesQuery {
+    allMediaLibraries {
       id
       is_public
       file_name
