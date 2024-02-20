@@ -44,7 +44,7 @@ export default function PointForm(props) {
       latitude: formData.latitude,
       longitude: formData.longitude,
       title: formData.title,
-      marker_image: data.ObjectURL,
+      marker_image: data.fileKey,
     }
     try {
       createFlightPoint({ variables: { createFlightPointInput } })
