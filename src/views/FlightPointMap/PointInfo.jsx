@@ -18,7 +18,6 @@ PointInfo.propTypes = {
 
 export default function PointInfo(props) {
   const { editMode, markerInfo } = props
-  console.log(markerInfo)
   return (
     <div className='min-w-0 flex-1'>
       <h2 className='text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight'>{editMode ? 'ポイントを選択してください。' : markerInfo ? markerInfo.title : '---'}</h2>

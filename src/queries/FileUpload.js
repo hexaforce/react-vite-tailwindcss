@@ -85,8 +85,35 @@ async function uploadFileToS3(token, bucket, fileBlob) {
   }
 }
 
+async function downloadFilesFromS3(token, bucket, fileKeys) {
+  const downloadFileFromS3s = fileKeys.map((fileKey) => downloadFileFromS3(token, bucket, fileKey))
+  return await Promise.all(downloadFileFromS3s)
+}
+
+async function downloadFileFromS3(token, bucket, fileKey) {
+  try {
+    const wasabi = new FormData()
+    wasabi.append('bucket', bucket)
+    wasabi.append('fileKey', fileKey)
+    const response = await fetch('http://localhost:8001/api/wasabi2', {
+      method: 'POST',
+      body: wasabi,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (response.ok) {
+      const fileBlob = await response.blob()
+      return {
+        wasabi_file_key: fileKey,
+        objectURL: URL.createObjectURL(fileBlob),
+      }
+    }
+  } catch (error) {
+    console.error(error.message)
+  }
+}
+
 const fileSize = (size) => {
   return size > 1024 ? (size > 1048576 ? Math.round(size / 1048576) + 'mb' : Math.round(size / 1024) + 'kb') : size + 'b'
 }
 
-export { GET_POST_OBJECTS, CREATE_PRESIGNED_REQUEST, LIST_OBJECTS, uploadFileToS3, uploadPresignedUrl, fileSize }
+export { GET_POST_OBJECTS, CREATE_PRESIGNED_REQUEST, LIST_OBJECTS, uploadFileToS3, downloadFilesFromS3, downloadFileFromS3, uploadPresignedUrl, fileSize }
