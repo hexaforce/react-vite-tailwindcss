@@ -17,7 +17,13 @@ const LIST_OBJECTS = gql`
     }
   }
 `
-
+  // const { loading, error, data } = useQuery(LIST_OBJECTS, {
+  //   variables: {
+  //     Name: 'fpv-japan-public',
+  //     Marker: 0,
+  //     MaxKeys: 1000,
+  //   },
+  // })
 const GET_POST_OBJECTS = gql`
   query GetPostObjects($names: [String!]!) {
     postObjectV4(names: $names) {
@@ -104,7 +110,7 @@ async function downloadFileFromS3(token, bucket, fileKey) {
       const fileBlob = await response.blob()
       return {
         wasabi_file_key: fileKey,
-        objectURL: URL.createObjectURL(fileBlob),
+        fileBlob: fileBlob,
       }
     }
   } catch (error) {

@@ -41,7 +41,7 @@ export const navigation = [
   },
   {
     name: 'MediaLibrary',
-    path: '/movie',
+    path: '/media',
     element: <MediaLibrary />,
     subLayout: 'none',
   },
