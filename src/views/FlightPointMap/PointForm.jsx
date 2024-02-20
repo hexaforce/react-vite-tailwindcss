@@ -20,7 +20,7 @@ PointForm.propTypes = {
 }
 
 export default function PointForm(props) {
-  const { user, getIdTokenClaims } = useAuth0()
+
   const { open, setOpen, formData, setFormData } = props
 
   const cancelButtonRef = useRef(null)
@@ -34,8 +34,8 @@ export default function PointForm(props) {
     setFormData({ ...formData, markerImage: event.target.files[0] })
   }
 
+  const { getIdTokenClaims } = useAuth0()
   const [createFlightPoint] = useMutation(CREATE_FLIGHT_POINT_MUTATION)
-
   const onSubmit = async (event) => {
     event.preventDefault()
     const token = (await getIdTokenClaims()).__raw

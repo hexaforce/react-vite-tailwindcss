@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { LIST_OBJECTS } from '@/queries/FileUpload'
+import { LIST_OBJECTS, ALL_MEDIA_LIBRARY_QUERY } from '@/queries/FileUpload'
 
 const products = [
   {
@@ -50,16 +50,17 @@ const products = [
 ]
 
 export default function MediaLibrary() {
-
-  const { loading, error, data } = useQuery(LIST_OBJECTS, {
-    variables: {     Name: 'fpv-japan-public',
-    Marker: 0,
-    MaxKeys: 1000, },
-  })
-
+  // const { loading, error, data } = useQuery(LIST_OBJECTS, {
+  //   variables: {
+  //     Name: 'fpv-japan-public',
+  //     Marker: 0,
+  //     MaxKeys: 1000,
+  //   },
+  // })
+  const { loading, error, data } = useQuery(ALL_MEDIA_LIBRARY_QUERY)
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
-  console.log(data?.Contents)
+  console.log(data)
 
   return (
     <div className='bg-white'>

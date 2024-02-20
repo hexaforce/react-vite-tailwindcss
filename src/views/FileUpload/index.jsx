@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import '@/assets/scss/FileUpload.scss'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { VideoTemplate, ImageTemplate, FileTemplate } from '@/views/FileUpload/Template'
-import { uploadPresignedUrl, CREATE_PRESIGNED_REQUEST } from '@/queries/FileUpload'
+import { uploadPresignedUrl, CREATE_PRESIGNED_REQUEST, GET_POST_OBJECTS, LIST_OBJECTS } from '@/queries/FileUpload'
+import { CREATE_MEDIA_LIBRARY_MUTATION } from '@/queries/MediaLibrary'
+import { uploadFileToS3 } from '@/queries/FileUpload'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export default function FileUpload() {
   const [isDraggedOver, setIsDraggedOver] = useState(false)
@@ -66,37 +69,64 @@ export default function FileUpload() {
     setFiles(newFiles)
   }
 
-  const [submitClicked, setSubmitClicked] = useState(false)
-  const [names, setNames] = useState([])
 
+  const { getIdTokenClaims } = useAuth0()
+  const [createMediaLibrary] = useMutation(CREATE_MEDIA_LIBRARY_MUTATION)
+  async function submit(event) {
+    event.preventDefault()
+
+    const token = (await getIdTokenClaims()).__raw
+    Object.keys(files).forEach((objectURL) => {
+      uploadFileToS3(token, 'fpv-japan-public', files[objectURL])
+        .then((response) => {
+          const createMediaLibraryInput = {
+            file_name: files[objectURL].name,
+            file_type: files[objectURL].type,
+            file_size: files[objectURL].size,
+            wasabi_file_key: response.ObjectURL,
+          }
+          try {
+            createMediaLibrary({ variables: { createMediaLibraryInput } })
+              .then((response) => console.log('response:', response.data))
+              .catch((error) => console.log('error:', error))
+          } catch (error) {
+            console.error(error.message)
+          }
+          // console.log('response:', response.data)
+          // response.data.ObjectURL
+        })
+        .catch((error) => console.log('error:', error))
+    })
+
+    // setSubmitClicked(true)
+    // setNames(Object.keys(files).map((objectURL) => files[objectURL].name))
+    // refetch()
+  }
+
+  // const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
+  //   variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
+  //   skip: !submitClicked,
+  // })
+
+  // const [submitClicked, setSubmitClicked] = useState(false)
+  // const [names, setNames] = useState([])
   // const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
   //   variables: { names },
   //   skip: !submitClicked,
   // })
 
-  const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
-    variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
-    skip: !submitClicked,
-  })
-
-  function submit() {
-    setSubmitClicked(true)
-    setNames(Object.keys(files).map((objectURL) => files[objectURL].name))
-    refetch()
-  }
-
-  useEffect(() => {
-    if (loading || !data) return
-    Object.keys(files).map((objectURL) => {
-      const fileBlob = files[objectURL]
-      const presignedUrl = data.createPresignedRequest.find((result) => result.fileName === fileBlob.name).presignedUrl
-      uploadPresignedUrl(fileBlob, presignedUrl)
-    })
-  }, [loading, error, data, files])
+  // useEffect(() => {
+  //   if (loading || !data) return
+  //   // Object.keys(files).map((objectURL) => {
+  //   //   const fileBlob = files[objectURL]
+  //   //   const presignedUrl = data.createPresignedRequest.find((result) => result.fileName === fileBlob.name).presignedUrl
+  //   //   uploadPresignedUrl(fileBlob, presignedUrl)
+  //   // })
+  // }, [loading, error, data, files])
 
   return (
     <div className='h-screen w-screen bg-gray-500 sm:px-8 sm:py-8 md:px-16'>
-      <main className='container mx-auto h-full max-w-screen-lg'>
+      <form onSubmit={(event) => submit(event)} className='container mx-auto h-full max-w-screen-lg'>
         {/* file upload modal */}
         <article aria-label='File Upload Modal' className='relative flex h-full flex-col rounded-md bg-white shadow-xl' onDrop={dropHandler} onDragOver={dragOverHandler} onDragLeave={dragLeaveHandler} onDragEnter={dragEnterHandler}>
           {/* overlay */}
@@ -141,15 +171,15 @@ export default function FileUpload() {
 
           {/* sticky footer */}
           <footer className='flex justify-end px-8 pb-8 pt-4'>
-            <button className='focus:shadow-outline rounded-sm bg-blue-700 px-3 py-1 text-white hover:bg-blue-500 focus:outline-none' onClick={() => submit()}>
+            <button type='submit' className='focus:shadow-outline rounded-sm bg-blue-700 px-3 py-1 text-white hover:bg-blue-500 focus:outline-none'>
               Upload now
             </button>
-            <button id='cancel' className='focus:shadow-outline ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:outline-none' onClick={() => setFiles({})}>
+            <button type='button' className='focus:shadow-outline ml-3 rounded-sm px-3 py-1 hover:bg-gray-300 focus:outline-none' onClick={() => setFiles({})}>
               Cancel
             </button>
           </footer>
         </article>
-      </main>
+      </form>
     </div>
   )
 }

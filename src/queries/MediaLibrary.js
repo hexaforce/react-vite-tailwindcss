@@ -23,4 +23,32 @@ const ASSETS_QUERY = gql`
   }
 `
 
-export { ASSETS_QUERY }
+const ALL_MEDIA_LIBRARY_QUERY = gql`
+  query AllMediaLibraryQuery {
+    allMediaLibrarys {
+      id
+      is_public
+      file_name
+      file_type
+      file_size
+      wasabi_file_key
+      registered_at
+    }
+  }
+`
+
+const CREATE_MEDIA_LIBRARY_MUTATION = gql`
+  mutation CreateMediaLibraryMutation($createMediaLibraryInput: CreateMediaLibraryInput!) {
+    createMediaLibrary(createMediaLibraryInput: $createMediaLibraryInput) {
+      id
+      is_public
+      file_name
+      file_type
+      file_size
+      wasabi_file_key
+      registered_at
+    }
+  }
+`
+
+export { ASSETS_QUERY, ALL_MEDIA_LIBRARY_QUERY, CREATE_MEDIA_LIBRARY_MUTATION }
