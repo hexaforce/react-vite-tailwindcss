@@ -83,7 +83,7 @@ export default function FileUpload() {
             file_name: files[objectURL].name,
             file_type: files[objectURL].type,
             file_size: files[objectURL].size,
-            wasabi_file_key: response.ObjectURL,
+            wasabi_file_key: response.fileKey,
           }
           try {
             createMediaLibrary({ variables: { createMediaLibraryInput } })
@@ -93,7 +93,7 @@ export default function FileUpload() {
             console.error(error.message)
           }
           // console.log('response:', response.data)
-          // response.data.ObjectURL
+          // response.data.fileKey
         })
         .catch((error) => console.log('error:', error))
     })
