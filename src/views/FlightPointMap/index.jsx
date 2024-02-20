@@ -6,6 +6,7 @@ import { classNames } from '@/utils'
 import MapBox from '@/components/mapbox-gl'
 import PointInfo from '@/views/FlightPointMap/PointInfo'
 import PointForm from '@/views/FlightPointMap/PointForm'
+import PointForm2 from '@/views/FlightPointMap/PointForm2'
 
 export default function FlightPointMap() {
   const [editMode, setEditMode] = useState(false)
@@ -13,6 +14,7 @@ export default function FlightPointMap() {
   const [markerInfo, setMarkerInfo] = useState(null)
 
   const [open, setOpen] = useState(false)
+  const [openPointForm, setOpenPointForm] = useState(false)
 
   const editAction = () => {
     setEditMode(!editMode)
@@ -34,18 +36,18 @@ export default function FlightPointMap() {
   return (
     <div className='bg-white px-4 lg:px-0'>
       <div className='lg:flex lg:items-center lg:justify-between'>
-        <PointInfo editMode={editMode} markerInfo={markerInfo}/>
+        <PointInfo editMode={editMode} markerInfo={markerInfo} />
         <div className='mt-3 flex lg:ml-4 lg:mt-0'>
           <span className='hidden sm:block'>
             {editMode ? (
               <button type='button' className='inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto' onClick={() => editAction()}>
                 <XMarkIcon className='-ml-0.5 mr-1.5 h-5 w-5 text-white' aria-hidden='true' />
-                Cancel
+                キャンセル
               </button>
             ) : (
               <button type='button' className='inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' onClick={() => editAction()}>
                 <PencilSquareIcon className='-ml-0.5 mr-1.5 h-5 w-5 text-white' aria-hidden='true' />
-                New Point
+                新しいマーカーを登録
               </button>
             )}
           </span>
@@ -76,9 +78,10 @@ export default function FlightPointMap() {
         </div>
       </div>
       <div className='mx-auto max-w-7xl py-3'>
-        <MapBox editMode={editMode} selectPoint={selectPoint} setSelectPoint={setSelectPoint} markerInfo={markerInfo} setMarkerInfo={setMarkerInfo} setOpen={setOpen} />
+        <MapBox editMode={editMode} selectPoint={selectPoint} setSelectPoint={setSelectPoint} markerInfo={markerInfo} setMarkerInfo={setMarkerInfo} setOpen={setOpenPointForm} />
       </div>
       <PointForm open={open} setOpen={setOpen} formData={formData} setFormData={setFormData} />
+      <PointForm2 openPointForm={openPointForm} setOpenPointForm={setOpenPointForm} />
     </div>
   )
 }

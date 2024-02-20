@@ -4,7 +4,8 @@ import { downloadFileFromS3, downloadFilesFromS3 } from '@/queries/FileUpload'
 import { ALL_MEDIA_LIBRARY_QUERY } from '@/queries/MediaLibrary'
 import { useAuth0 } from '@auth0/auth0-react'
 
-import MediaDialog from '@/views/MediaLibrary/MediaDialog'
+import MediaPreview from '@/views/MediaLibrary/MediaPreview'
+import FileUpload from '@/views/MediaLibrary/FileUpload'
 
 export default function MediaLibrary() {
   const { getIdTokenClaims } = useAuth0()
@@ -23,8 +24,10 @@ export default function MediaLibrary() {
     )
   }
 
+  const [openFileUpload, setOpenFileUpload] = useState(false)
+
   const [currentBlob, setCurrentBlob] = useState(null)
-  const [openMediaDialog, setOpenMediaDialog] = useState(false)
+  const [openMediaPreview, setOpenMediaPreview] = useState(false)
 
   useEffect(() => {
     if (loading || error) return
@@ -33,9 +36,9 @@ export default function MediaLibrary() {
 
   async function clickMedia(wasabi_file_key) {
     const token = (await getIdTokenClaims()).__raw
-    const target =  await downloadFileFromS3(token, 'fpv-japan-public', wasabi_file_key)
+    const target = await downloadFileFromS3(token, 'fpv-japan-public', wasabi_file_key)
     setCurrentBlob(target.fileBlob)
-    setOpenMediaDialog(true)
+    setOpenMediaPreview(true)
   }
 
   if (loading || thumbnailImages.length === 0) return <div>Loading...</div>
@@ -48,7 +51,8 @@ export default function MediaLibrary() {
 
   return (
     <div className='bg-white'>
-      <MediaDialog openMediaDialog={openMediaDialog} setOpenMediaDialog={setOpenMediaDialog} currentBlob={currentBlob} />
+      <FileUpload openFileUpload={openFileUpload} setOpenFileUpload={setOpenFileUpload} />
+      <MediaPreview openMediaPreview={openMediaPreview} setOpenMediaPreview={setOpenMediaPreview} currentBlob={currentBlob} />
       <div className='mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8'>
         <h2 className='text-2xl font-bold tracking-tight text-gray-900'>公開動画</h2>
         <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>

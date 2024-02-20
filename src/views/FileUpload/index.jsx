@@ -125,7 +125,7 @@ export default function FileUpload() {
   // }, [loading, error, data, files])
 
   return (
-    <div className='h-screen w-screen bg-gray-500 sm:px-8 sm:py-8 md:px-16'>
+    // <div className='h-screen w-screen bg-gray-500 sm:px-8 sm:py-8 md:px-16'>
       <form onSubmit={(event) => submit(event)} className='container mx-auto h-full max-w-screen-lg'>
         {/* file upload modal */}
         <article aria-label='File Upload Modal' className='relative flex h-full flex-col rounded-md bg-white shadow-xl' onDrop={dropHandler} onDragOver={dragOverHandler} onDragLeave={dragLeaveHandler} onDragEnter={dragEnterHandler}>
@@ -180,6 +180,6 @@ export default function FileUpload() {
           </footer>
         </article>
       </form>
-    </div>
+    // </div>
   )
 }

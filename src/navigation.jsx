@@ -1,4 +1,4 @@
-import { Description, Stacked, Contact,  Form, NotFound, Chat, Products } from '@/views'
+import { Description, Stacked, Contact, Slide, Form, NotFound, Chat, Products } from '@/views'
 import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 
 import Calendar from '@/components/fullcalendar'
@@ -57,12 +57,12 @@ export const navigation = [
   //   element: <Dialogs />,
   //   subLayout: subLayout,
   // },
-  {
-    name: 'Description',
-    path: '/description',
-    element: <Description />,
-    subLayout: subLayout,
-  },
+  // {
+  //   name: 'Description',
+  //   path: '/description',
+  //   element: <Description />,
+  //   subLayout: subLayout,
+  // },
   {
     name: 'FileUpload',
     path: '/fileUpload',
@@ -83,12 +83,12 @@ export const navigation = [
   //   element: <Stacked />,
   //   subLayout: subLayout,
   // },
-  {
-    name: 'Form',
-    path: '/form',
-    element: <Form />,
-    subLayout: subLayout,
-  },
+  // {
+  //   name: 'Form',
+  //   path: '/form',
+  //   element: <Form />,
+  //   subLayout: subLayout,
+  // },
   // {
   //   name: 'Top',
   //   path: '/top',
@@ -107,12 +107,12 @@ export const navigation = [
   //   element: <SignIn />,
   //   subLayout: 'none',
   // },
-  // {
-  //   name: 'Slide',
-  //   path: '/slide',
-  //   element: <Slide />,
-  //   subLayout: 'none',
-  // },
+  {
+    name: 'Slide',
+    path: '/slide',
+    element: <Slide />,
+    subLayout: 'none',
+  },
 ]
 
 export const userNavigation = [
