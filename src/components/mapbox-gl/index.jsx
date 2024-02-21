@@ -51,14 +51,17 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
       getThumbnailImages()
     }
   }, [data, loading, error, getIdTokenClaims])
-  function thumbnail(marker_image) {
-    const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === marker_image)
-    return URL.createObjectURL(thumbnail.fileBlob)
+  function thumbnail(flightPoint) {
+    const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === flightPoint.marker_image)
+    if (!thumbnail) return <></>
+    const imgOption ={ width: 50, height: 50, display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }
+    const imgUrl = URL.createObjectURL(thumbnail.fileBlob)
+    return <img style={imgOption} src={imgUrl} alt={flightPoint.title} onClick={() => clickMarker(flightPoint)} />
   }
 
   const [currentBlob, setCurrentBlob] = useState(null)
 
-  if (loading || thumbnailImages.length === 0) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
 
   async function clickMarker(flightPoint) {
@@ -95,8 +98,8 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
       {!editMode &&
         data?.allFlightPoints.map((flightPoint) => {
           return (
-            <Marker key={flightPoint.id} draggable latitude={flightPoint.latitude} longitude={flightPoint.longitude}>
-              <img style={{ display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }} src={thumbnail(flightPoint.marker_image)} alt={flightPoint.title} onClick={() => clickMarker(flightPoint)} />
+            <Marker key={flightPoint.id} latitude={flightPoint.latitude} longitude={flightPoint.longitude}>
+              {thumbnail(flightPoint)}
             </Marker>
           )
         })}
