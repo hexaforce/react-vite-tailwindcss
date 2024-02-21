@@ -6,8 +6,8 @@ import { useQuery } from '@apollo/client'
 import { useAuth0 } from '@auth0/auth0-react'
 import { downloadFileFromS3, downloadFilesFromS3 } from '@/queries/FileUpload'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
-
 import { ALL_FLIGHT_POINTS_QUERY } from '@/queries/FlightPoint'
+import { Loading } from '@/assets/Loading'
 
 MapBox.propTypes = {
   editMode: PropTypes.bool.isRequired,
@@ -38,6 +38,7 @@ export default function MapBox({ editMode, setEditMode, selectPoint, setSelectPo
   const { getIdTokenClaims } = useAuth0()
 
   const { loading, error, data, refetch } = useQuery(ALL_FLIGHT_POINTS_QUERY)
+  const [loading2, setLoading2] = useState(true)
   const [thumbnailImages, setThumbnailImages] = useState([])
   useEffect(() => {
     async function getThumbnailImages() {
@@ -49,6 +50,7 @@ export default function MapBox({ editMode, setEditMode, selectPoint, setSelectPo
         true,
       )
       setThumbnailImages(images)
+      setLoading2(false)
     }
     if (!loading && !error) {
       getThumbnailImages()
@@ -80,7 +82,7 @@ export default function MapBox({ editMode, setEditMode, selectPoint, setSelectPo
     refetch()
   }, [openPointForm, setEditMode, setSelectPoint, refetch])
 
-  if (loading) return <div>Loading...</div>
+  if (loading || loading2) return <Loading />
   if (error) return <div>Error: {error.message}</div>
 
   return (

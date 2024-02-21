@@ -6,11 +6,13 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import MediaPreview, { MediaContent } from '@/views/MediaLibrary/MediaPreview'
 import FileUpload, { FileUploadForm } from '@/views/MediaLibrary/FileUpload'
+import { Loading } from '@/assets/Loading'
 
 export default function MediaLibrary() {
   const { getIdTokenClaims } = useAuth0()
 
   const { loading, error, data, refetch } = useQuery(ALL_MEDIA_LIBRARY_QUERY)
+  const [loading2, setLoading2] = useState(true)
   const [thumbnailImages, setThumbnailImages] = useState([])
   useEffect(() => {
     async function getThumbnailImages() {
@@ -22,6 +24,7 @@ export default function MediaLibrary() {
         true,
       )
       setThumbnailImages(images)
+      setLoading2(false)
     }
     if (!loading && !error) {
       getThumbnailImages()
@@ -55,7 +58,7 @@ export default function MediaLibrary() {
   //   console.log('openMediaPreview:', openMediaPreview)
   // }, [openMediaPreview])
 
-  if (loading) return <div>Loading...</div>
+  if (loading || loading2) return <Loading />
   if (error) return <div>Error: {error.message}</div>
 
   return (
