@@ -41,6 +41,26 @@ const GET_POST_OBJECTS = gql`
     }
   }
 `
+  // const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
+  //   variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
+  //   skip: !submitClicked,
+  // })
+
+  // const [submitClicked, setSubmitClicked] = useState(false)
+  // const [names, setNames] = useState([])
+  // const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
+  //   variables: { names },
+  //   skip: !submitClicked,
+  // })
+
+  // useEffect(() => {
+  //   if (loading || !data) return
+  //   // Object.keys(files).map((objectURL) => {
+  //   //   const fileBlob = files[objectURL]
+  //   //   const presignedUrl = data.createPresignedRequest.find((result) => result.fileName === fileBlob.name).presignedUrl
+  //   //   uploadPresignedUrl(fileBlob, presignedUrl)
+  //   // })
+  // }, [loading, error, data, files])
 
 const CREATE_PRESIGNED_REQUEST = gql`
   query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
@@ -73,11 +93,12 @@ async function uploadPresignedUrl(token, fileBlob, presignUrl) {
   }
 }
 
-async function uploadFileToS3(token, bucket, fileBlob) {
+async function uploadFileToS3(token, bucket, fileBlob, thumbnail) {
   try {
     const wasabi = new FormData()
     wasabi.append('bucket', bucket)
     wasabi.append('file', fileBlob)
+    wasabi.append('thumbnail', thumbnail)
     const response = await fetch('http://localhost:8001/api/wasabi', {
       method: 'POST',
       body: wasabi,

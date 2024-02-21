@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { downloadFileFromS3, downloadFilesFromS3 } from '@/queries/FileUpload'
+import { downloadFilesFromS3 } from '@/queries/FileUpload'
 import { ALL_MEDIA_LIBRARY_QUERY } from '@/queries/MediaLibrary'
 import { useAuth0 } from '@auth0/auth0-react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
@@ -58,7 +58,7 @@ export default function MediaLibrary() {
           {thumbnailImages.length === 0 && <>Nothing</>}
           {data?.allMediaLibraries.map((mediaLibrary) => (
             <div key={mediaLibrary.id} className='group relative'>
-              <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80'>{thumbnail(mediaLibrary)}</div>
+              <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-40'>{thumbnail(mediaLibrary)}</div>
               <div className='mt-4 flex justify-between'>
                 <div>
                   <h3 className='text-sm text-gray-700'>

@@ -4,8 +4,8 @@ import { Cog6ToothIcon, UserIcon } from '@heroicons/react/20/solid'
 import Calendar from '@/components/fullcalendar'
 
 // import FileUpload2 from '@/views/FileUpload2'
-import FileUpload from '@/views/FileUpload'
-import Dialogs from '@/views/Dialogs'
+// import FileUpload from '@/views/FileUpload'
+// import Dialogs from '@/views/Dialogs'
 import MediaLibrary from '@/views/MediaLibrary'
 
 import FlightPointMap from '@/views/FlightPointMap'
@@ -63,12 +63,12 @@ export const navigation = [
   //   element: <Description />,
   //   subLayout: subLayout,
   // },
-  {
-    name: 'FileUpload',
-    path: '/fileUpload',
-    element: <FileUpload />,
-    subLayout: subLayout,
-  },
+  // {
+  //   name: 'FileUpload',
+  //   path: '/fileUpload',
+  //   element: <FileUpload />,
+  //   subLayout: subLayout,
+  // },
   // mysqldump -h 127.0.0.1 -u fpv_v2008 -p -P 3307 fpv_v2008 --no-data > dumpfile.sql
   // {
   //   name: 'Products',

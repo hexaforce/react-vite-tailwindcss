@@ -49,7 +49,7 @@ export function PointFormInput({ setOpenPointForm, selectPoint }) {
     event.preventDefault()
 
     const token = (await getIdTokenClaims()).__raw
-    const data = await uploadFileToS3(token, 'fpv-japan-public', formData.markerImage)
+    const data = await uploadFileToS3(token, 'fpv-japan-public', formData.markerImage, 'map')
     
     const createFlightPointInput = {
       latitude: formData.latitude,

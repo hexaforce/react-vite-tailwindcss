@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import PropTypes from 'prop-types'
 import '@/assets/scss/FileUpload.scss'
 import { useMutation } from '@apollo/client'
-import { VideoTemplate, ImageTemplate, FileTemplate } from '@/views/FileUpload/Template'
+import { VideoTemplate, ImageTemplate, FileTemplate } from '@/views/MediaLibrary/Template'
 
 import { CREATE_MEDIA_LIBRARY_MUTATION } from '@/queries/MediaLibrary'
 import { uploadFileToS3 } from '@/queries/FileUpload'
@@ -84,7 +84,7 @@ export function FileUploadForm({ setOpenFileUpload }) {
 
     const token = (await getIdTokenClaims()).__raw
     Object.keys(files).forEach((objectURL) => {
-      uploadFileToS3(token, 'fpv-japan-public', files[objectURL])
+      uploadFileToS3(token, 'fpv-japan-public', files[objectURL], 'media')
         .then((response) => {
           const createMediaLibraryInput = {
             file_name: files[objectURL].name,
