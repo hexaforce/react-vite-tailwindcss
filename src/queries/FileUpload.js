@@ -112,6 +112,11 @@ async function downloadFileFromS3(token, bucket, wasabi_file_key, thumbnail) {
         wasabi_file_key: wasabi_file_key,
         fileBlob: fileBlob,
       }
+    } else {
+      return {
+        wasabi_file_key: wasabi_file_key,
+        fileBlob: null,
+      }
     }
   } catch (error) {
     console.error(error.message)

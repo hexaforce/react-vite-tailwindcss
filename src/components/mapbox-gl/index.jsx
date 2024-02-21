@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/client'
 import { useAuth0 } from '@auth0/auth0-react'
 import { downloadFileFromS3, downloadFilesFromS3 } from '@/queries/FileUpload'
+import {  QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 
 import { ALL_FLIGHT_POINTS_QUERY } from '@/queries/FlightPoint'
 
@@ -53,7 +54,7 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
   }, [data, loading, error, getIdTokenClaims])
   function thumbnail(flightPoint) {
     const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === flightPoint.marker_image)
-    if (!thumbnail) return <></>
+    if (!thumbnail || !thumbnail.fileBlob) return <QuestionMarkCircleIcon />
     const imgOption = { width: 50, height: 50, display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }
     const imgUrl = URL.createObjectURL(thumbnail.fileBlob)
     return <img style={imgOption} src={imgUrl} alt={flightPoint.title} />
