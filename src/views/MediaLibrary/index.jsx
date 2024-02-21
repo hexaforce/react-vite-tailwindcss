@@ -27,25 +27,16 @@ export default function MediaLibrary() {
       getThumbnailImages()
     }
   }, [data, loading, error, getIdTokenClaims])
-  function thumbnail(wasabi_file_key, file_type) {
-    const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === wasabi_file_key)
+  function thumbnail(mediaLibrary) {
+    const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === mediaLibrary.wasabi_file_key)
     if (!thumbnail || !thumbnail.fileBlob) return <QuestionMarkCircleIcon />
-    return <img src={URL.createObjectURL(thumbnail.fileBlob)} alt={file_type} className='h-full w-full object-cover object-center lg:h-full lg:w-full' />
+    return <img src={URL.createObjectURL(thumbnail.fileBlob)} alt={mediaLibrary.file_type} className='h-full w-full object-cover object-center lg:h-full lg:w-full' />
   }
 
   const [openFileUpload, setOpenFileUpload] = useState(false)
 
-  const [currentBlob, setCurrentBlob] = useState(null)
   const [openMediaPreview, setOpenMediaPreview] = useState(false)
-
-  async function clickMedia(wasabi_file_key) {
-    const token = (await getIdTokenClaims()).__raw
-    const target = await downloadFileFromS3(token, 'fpv-japan-public', wasabi_file_key, false)
-    setCurrentBlob(target.fileBlob)
-    if (target.fileBlob) {
-      setOpenMediaPreview(true)
-    }
-  }
+  const [clickMedia, setClickMedia] = useState(null)
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
@@ -55,7 +46,7 @@ export default function MediaLibrary() {
       <FileUpload openFileUpload={openFileUpload} setOpenFileUpload={setOpenFileUpload}>
         <FileUploadForm setOpenFileUpload={setOpenFileUpload} />
       </FileUpload>
-      <MediaPreview openMediaPreview={openMediaPreview} setOpenMediaPreview={setOpenMediaPreview} currentBlob={currentBlob} />
+      <MediaPreview openMediaPreview={openMediaPreview} setOpenMediaPreview={setOpenMediaPreview} clickMedia={clickMedia} />
       <div className='mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8'>
         <div className='flex justify-between items-center'>
           <h2 className='text-2xl font-bold tracking-tight text-gray-900'>公開動画</h2>
@@ -65,18 +56,25 @@ export default function MediaLibrary() {
         </div>
         <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8'>
           {thumbnailImages.length === 0 && <>Nothing</>}
-          {data?.allMediaLibraries.map(({ id, is_public, file_name, file_type, file_size, wasabi_file_key, registered_at }) => (
-            <div key={id} className='group relative'>
-              <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80'>{thumbnail(wasabi_file_key, file_type)}</div>
+          {data?.allMediaLibraries.map((mediaLibrary) => (
+            <div key={mediaLibrary.id} className='group relative'>
+              <div className='aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80'>{thumbnail(mediaLibrary)}</div>
               <div className='mt-4 flex justify-between'>
                 <div>
                   <h3 className='text-sm text-gray-700'>
-                    <span aria-hidden='true' className='absolute inset-0' onClick={() => clickMedia(wasabi_file_key)} />
-                    {file_name}
+                    <span
+                      aria-hidden='true'
+                      className='absolute inset-0'
+                      onClick={() => {
+                        setClickMedia(mediaLibrary)
+                        setOpenMediaPreview(true)
+                      }}
+                    />
+                    {mediaLibrary.file_name}
                   </h3>
-                  <p className='mt-1 text-sm text-gray-500'>{registered_at}</p>
+                  <p className='mt-1 text-sm text-gray-500'>{mediaLibrary.registered_at}</p>
                 </div>
-                <p className='text-sm font-medium text-gray-900'>{file_size}</p>
+                <p className='text-sm font-medium text-gray-900'>{mediaLibrary.file_size}</p>
               </div>
             </div>
           ))}
