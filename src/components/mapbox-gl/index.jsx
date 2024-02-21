@@ -54,25 +54,24 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
   function thumbnail(flightPoint) {
     const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === flightPoint.marker_image)
     if (!thumbnail) return <></>
-    const imgOption ={ width: 50, height: 50, display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }
+    const imgOption = { width: 50, height: 50, display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }
     const imgUrl = URL.createObjectURL(thumbnail.fileBlob)
-    return <img style={imgOption} src={imgUrl} alt={flightPoint.title} onClick={() => clickMarker(flightPoint)} />
+    return <img style={imgOption} src={imgUrl} alt={flightPoint.title} />
   }
 
   const [currentBlob, setCurrentBlob] = useState(null)
+  useEffect(() => {
+    if (!selectMarker) return
+    async function getCurrentBlob() {
+      const token = (await getIdTokenClaims()).__raw
+      const target = await downloadFileFromS3(token, 'fpv-japan-public', selectMarker.marker_image, false)
+      setCurrentBlob(target.fileBlob)
+    }
+    getCurrentBlob()
+  }, [getIdTokenClaims, selectMarker])
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
-
-  async function clickMarker(flightPoint) {
-    setSelectMarker(null)
-
-    const token = (await getIdTokenClaims()).__raw
-    const target = await downloadFileFromS3(token, 'fpv-japan-public', flightPoint.marker_image, false)
-    setCurrentBlob(target.fileBlob)
-
-    setSelectMarker(flightPoint)
-  }
 
   return (
     <Map
@@ -87,7 +86,8 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
       // mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
       mapboxAccessToken='pk.eyJ1IjoicmVsaWNzOSIsImEiOiJjbHMzNHlwbDIwNDczMmtvM2xhNWR0ZzVtIn0.whCzeh6XW7ju4Ja6DR0imw'
       onClick={(event) => {
-        setSelectMarker(null)
+
+        // setSelectMarker(null)
         editMode &&
           setSelectPoint({
             latitude: event.lngLat.lat,
@@ -98,7 +98,15 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
       {!editMode &&
         data?.allFlightPoints.map((flightPoint) => {
           return (
-            <Marker key={flightPoint.id} latitude={flightPoint.latitude} longitude={flightPoint.longitude}>
+            <Marker
+              key={flightPoint.id}
+              latitude={flightPoint.latitude}
+              longitude={flightPoint.longitude}
+              onClick={() => {
+                setCurrentBlob(null)
+                setSelectMarker(flightPoint)
+              }}
+            >
               {thumbnail(flightPoint)}
             </Marker>
           )
@@ -106,7 +114,7 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
 
       {!editMode && selectMarker && (
         <Popup latitude={selectMarker.latitude} longitude={selectMarker.longitude} closeButton={true} closeOnClick={false} onClose={() => setSelectMarker(null)}>
-          {currentBlob && <img src={URL.createObjectURL(currentBlob)} alt={selectMarker.create_user} />}
+          {currentBlob ? <img src={URL.createObjectURL(currentBlob)} alt={selectMarker.create_user} /> : <div>Loading...</div>}
         </Popup>
       )}
 
