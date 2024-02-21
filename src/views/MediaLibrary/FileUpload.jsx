@@ -10,12 +10,11 @@ import { uploadFileToS3 } from '@/queries/FileUpload'
 import { useAuth0 } from '@auth0/auth0-react'
 
 FileUploadForm.propTypes = {
-  // children: PropTypes.node.isRequired,
-  // openFileUpload: PropTypes.bool.isRequired,
   setOpenFileUpload: PropTypes.func.isRequired,
+  refetch: PropTypes.func.isRequired,
 }
 
-export function FileUploadForm({ setOpenFileUpload }) {
+export function FileUploadForm({ setOpenFileUpload, refetch }) {
   const [isDraggedOver, setIsDraggedOver] = useState(false)
   const [counter, setCounter] = useState(0)
 
@@ -94,7 +93,11 @@ export function FileUploadForm({ setOpenFileUpload }) {
           }
           try {
             createMediaLibrary({ variables: { createMediaLibraryInput } })
-              .then((response) => console.log('response:', response.data))
+              .then((response) => {
+                console.log('response:', response.data)
+                refetch()
+                setOpenFileUpload(false)
+              })
               .catch((error) => console.log('error:', error))
           } catch (error) {
             console.error(error.message)
@@ -147,7 +150,6 @@ export function FileUploadForm({ setOpenFileUpload }) {
           </ul>
         </section>
 
-        {/* sticky footer */}
         <footer className='flex justify-end px-8 pb-8 pt-4'>
           <button
             type='button'
@@ -186,9 +188,7 @@ export default function FileUpload({ children, openFileUpload, setOpenFileUpload
         <div className='fixed inset-0 z-10 w-screen overflow-y-auto'>
           <div className='flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0'>
             <Transition.Child as={Fragment} enter='ease-out duration-300' enterFrom='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95' enterTo='opacity-100 translate-y-0 sm:scale-100' leave='ease-in duration-200' leaveFrom='opacity-100 translate-y-0 sm:scale-100' leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'>
-              <Dialog.Panel className='relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl'>
-                {children}
-              </Dialog.Panel>
+              <Dialog.Panel className='relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl'>{children}</Dialog.Panel>
             </Transition.Child>
           </div>
         </div>

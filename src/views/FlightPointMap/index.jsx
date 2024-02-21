@@ -1,7 +1,6 @@
-import { Fragment, useState, useEffect } from 'react'
+import { useState } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import {  PencilSquareIcon } from '@heroicons/react/20/solid'
-
+import { PencilSquareIcon } from '@heroicons/react/20/solid'
 import MapBox from '@/components/mapbox-gl'
 import PointInfo from '@/views/FlightPointMap/PointInfo'
 import PointForm, { PointFormInput } from '@/views/FlightPointMap/PointForm'
@@ -40,7 +39,7 @@ export default function FlightPointMap() {
           </span>
         </div>
       </div>
-      
+
       <div className='mx-auto max-w-7xl py-3'>
         <MapBox editMode={editMode} selectPoint={selectPoint} setSelectPoint={setSelectPoint} selectMarker={selectMarker} setSelectMarker={setSelectMarker} setOpenPointForm={setOpenPointForm} />
       </div>
