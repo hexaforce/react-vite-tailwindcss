@@ -17,13 +17,13 @@ const LIST_OBJECTS = gql`
     }
   }
 `
-  // const { loading, error, data } = useQuery(LIST_OBJECTS, {
-  //   variables: {
-  //     Name: 'fpv-japan-public',
-  //     Marker: 0,
-  //     MaxKeys: 1000,
-  //   },
-  // })
+// const { loading, error, data } = useQuery(LIST_OBJECTS, {
+//   variables: {
+//     Name: 'fpv-japan-public',
+//     Marker: 0,
+//     MaxKeys: 1000,
+//   },
+// })
 const GET_POST_OBJECTS = gql`
   query GetPostObjects($names: [String!]!) {
     postObjectV4(names: $names) {
@@ -91,16 +91,16 @@ async function uploadFileToS3(token, bucket, fileBlob) {
   }
 }
 
-async function downloadFilesFromS3(token, bucket, fileKeys) {
-  const downloadFileFromS3s = fileKeys.map((fileKey) => downloadFileFromS3(token, bucket, fileKey))
+async function downloadFilesFromS3(token, bucket, fileKeys, thumbnail) {
+  const downloadFileFromS3s = fileKeys.map((fileKey) => downloadFileFromS3(token, bucket, fileKey, thumbnail))
   return await Promise.all(downloadFileFromS3s)
 }
 
-async function downloadFileFromS3(token, bucket, fileKey) {
+async function downloadFileFromS3(token, bucket, wasabi_file_key, thumbnail) {
   try {
     const wasabi = new FormData()
     wasabi.append('bucket', bucket)
-    wasabi.append('fileKey', fileKey)
+    wasabi.append('fileKey', thumbnail ? `${wasabi_file_key}_thumbnail` : wasabi_file_key)
     const response = await fetch('http://localhost:8001/api/wasabi2', {
       method: 'POST',
       body: wasabi,
@@ -109,7 +109,7 @@ async function downloadFileFromS3(token, bucket, fileKey) {
     if (response.ok) {
       const fileBlob = await response.blob()
       return {
-        wasabi_file_key: fileKey,
+        wasabi_file_key: wasabi_file_key,
         fileBlob: fileBlob,
       }
     }

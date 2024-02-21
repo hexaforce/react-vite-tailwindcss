@@ -9,19 +9,27 @@ import FileUpload from '@/views/MediaLibrary/FileUpload'
 
 export default function MediaLibrary() {
   const { getIdTokenClaims } = useAuth0()
-  const [thumbnailImages, setThumbnailImages] = useState([])
 
   const { loading, error, data } = useQuery(ALL_MEDIA_LIBRARY_QUERY)
-
-  async function getThumbnailImages() {
-    const token = (await getIdTokenClaims()).__raw
-    setThumbnailImages(
-      await downloadFilesFromS3(
+  const [thumbnailImages, setThumbnailImages] = useState([])
+  useEffect(() => {
+    async function getThumbnailImages() {
+      const token = (await getIdTokenClaims()).__raw
+      const images = await downloadFilesFromS3(
         token,
         'fpv-japan-public',
-        data?.allMediaLibraries.map((m) => `${m.wasabi_file_key}_thumbnail`),
-      ),
-    )
+        data?.allMediaLibraries.map((m) => m.wasabi_file_key),
+        true,
+      )
+      setThumbnailImages(images)
+    }
+    if (!loading && !error) {
+      getThumbnailImages()
+    }
+  }, [data, loading, error, getIdTokenClaims])
+  function thumbnail(wasabi_file_key) {
+    const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === wasabi_file_key)
+    return URL.createObjectURL(thumbnail.fileBlob)
   }
 
   const [openFileUpload, setOpenFileUpload] = useState(false)
@@ -29,25 +37,15 @@ export default function MediaLibrary() {
   const [currentBlob, setCurrentBlob] = useState(null)
   const [openMediaPreview, setOpenMediaPreview] = useState(false)
 
-  useEffect(() => {
-    if (loading || error) return
-    getThumbnailImages()
-  }, [data])
-
   async function clickMedia(wasabi_file_key) {
     const token = (await getIdTokenClaims()).__raw
-    const target = await downloadFileFromS3(token, 'fpv-japan-public', wasabi_file_key)
+    const target = await downloadFileFromS3(token, 'fpv-japan-public', wasabi_file_key, false)
     setCurrentBlob(target.fileBlob)
     setOpenMediaPreview(true)
   }
 
   if (loading || thumbnailImages.length === 0) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
-
-  function thumbnail(wasabi_file_key) {
-    const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === `${wasabi_file_key}_thumbnail`)
-    return URL.createObjectURL(thumbnail.fileBlob)
-  }
 
   return (
     <div className='bg-white'>

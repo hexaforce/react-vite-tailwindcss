@@ -1,20 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Map, { Marker, Popup } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/client'
+import { useAuth0 } from '@auth0/auth0-react'
+import { downloadFileFromS3, downloadFilesFromS3 } from '@/queries/FileUpload'
 
 import { ALL_FLIGHT_POINTS_QUERY } from '@/queries/FlightPoint'
 
 MapBox.propTypes = {
   editMode: PropTypes.bool.isRequired,
+
   selectPoint: PropTypes.shape({
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired,
   }),
   setSelectPoint: PropTypes.func.isRequired,
 
-  markerInfo: PropTypes.shape({
+  selectMarker: PropTypes.shape({
     id: PropTypes.string.isRequired,
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired,
@@ -23,22 +26,50 @@ MapBox.propTypes = {
     marker_image: PropTypes.string.isRequired,
     registered_at: PropTypes.string.isRequired,
   }),
-  setMarkerInfo: PropTypes.func.isRequired,
-  setOpen: PropTypes.func.isRequired,
+  setSelectMarker: PropTypes.func.isRequired,
+
+  setOpenPointForm: PropTypes.func.isRequired,
 }
 
-export default function MapBox(props) {
-  const { editMode, selectPoint, setSelectPoint,markerInfo, setMarkerInfo, setOpen } = props
-
-
-  const markerSelect = (d) => {
-    setMarkerInfo(null)
-    setMarkerInfo(d)
-  }
+export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMarker, setSelectMarker, setOpenPointForm }) {
+  const { getIdTokenClaims } = useAuth0()
 
   const { loading, error, data } = useQuery(ALL_FLIGHT_POINTS_QUERY)
-  if (loading) return <div>Loading...</div>
+  const [thumbnailImages, setThumbnailImages] = useState([])
+  useEffect(() => {
+    async function getThumbnailImages() {
+      const token = (await getIdTokenClaims()).__raw
+      const images = await downloadFilesFromS3(
+        token,
+        'fpv-japan-public',
+        data?.allFlightPoints.map((m) => m.marker_image),
+        true,
+      )
+      setThumbnailImages(images)
+    }
+    if (!loading && !error) {
+      getThumbnailImages()
+    }
+  }, [data, loading, error, getIdTokenClaims])
+  function thumbnail(marker_image) {
+    const thumbnail = thumbnailImages.find((t) => t.wasabi_file_key === marker_image)
+    return URL.createObjectURL(thumbnail.fileBlob)
+  }
+
+  const [currentBlob, setCurrentBlob] = useState(null)
+
+  if (loading || thumbnailImages.length === 0) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
+
+  async function clickMarker(flightPoint) {
+    setSelectMarker(null)
+
+    const token = (await getIdTokenClaims()).__raw
+    const target = await downloadFileFromS3(token, 'fpv-japan-public', flightPoint.marker_image, false)
+    setCurrentBlob(target.fileBlob)
+
+    setSelectMarker(flightPoint)
+  }
 
   return (
     <Map
@@ -53,6 +84,7 @@ export default function MapBox(props) {
       // mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
       mapboxAccessToken='pk.eyJ1IjoicmVsaWNzOSIsImEiOiJjbHMzNHlwbDIwNDczMmtvM2xhNWR0ZzVtIn0.whCzeh6XW7ju4Ja6DR0imw'
       onClick={(event) => {
+        setSelectMarker(null)
         editMode &&
           setSelectPoint({
             latitude: event.lngLat.lat,
@@ -61,24 +93,25 @@ export default function MapBox(props) {
       }}
     >
       {!editMode &&
-        data?.allFlightPoints.map((d) => {
+        data?.allFlightPoints.map((flightPoint) => {
           return (
-            <Marker key={d.id} draggable latitude={d.latitude} longitude={d.longitude}>
-              <img style={{ display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }} src='https://placekitten.com/50/50' alt='Marker' onClick={() => markerSelect(d)} />
+            <Marker key={flightPoint.id} draggable latitude={flightPoint.latitude} longitude={flightPoint.longitude}>
+              <img style={{ display: 'block', border: 'none', borderRadius: '50%', cursor: 'pointer', padding: 0 }} src={thumbnail(flightPoint.marker_image)} alt={flightPoint.title} onClick={() => clickMarker(flightPoint)} />
             </Marker>
           )
         })}
 
-      {editMode && selectPoint && (
-        <Popup latitude={selectPoint.latitude} longitude={selectPoint.longitude} closeButton={false} closeOnClick={false} onClose={() => setSelectPoint(null)}>
-          <button type='button' onClick={() => setOpen(true)} className='rounded-md bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
-            ここに追加
-          </button>
+      {!editMode && selectMarker && (
+        <Popup latitude={selectMarker.latitude} longitude={selectMarker.longitude} closeButton={true} closeOnClick={false} onClose={() => setSelectMarker(null)}>
+          {currentBlob && <img src={URL.createObjectURL(currentBlob)} alt={selectMarker.create_user} />}
         </Popup>
       )}
-      {!editMode && markerInfo && (
-        <Popup latitude={markerInfo.latitude} longitude={markerInfo.longitude} closeButton={true} closeOnClick={false} onClose={() => setMarkerInfo(null)}>
-          <img src='https://placekitten.com/150/150' alt='Marker'></img>
+
+      {editMode && selectPoint && (
+        <Popup latitude={selectPoint.latitude} longitude={selectPoint.longitude} closeButton={false} closeOnClick={false} onClose={() => setSelectPoint(null)}>
+          <button type='button' onClick={() => setOpenPointForm(true)} className='rounded-md bg-indigo-600 px-3 py-2 text-sm text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
+            ここに追加
+          </button>
         </Popup>
       )}
     </Map>
