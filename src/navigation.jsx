@@ -34,16 +34,16 @@ export const navigation = [
     subLayout: 'none',
   },
   {
-    name: 'EventSchedule',
-    path: '/calendar',
-    element: <Calendar />,
-    subLayout: subLayout,
-  },
-  {
     name: 'MediaLibrary',
     path: '/media',
     element: <MediaLibrary />,
     subLayout: 'none',
+  },
+  {
+    name: 'EventSchedule',
+    path: '/calendar',
+    element: <Calendar />,
+    subLayout: subLayout,
   },
   {
     name: 'OpenChat',
@@ -107,12 +107,12 @@ export const navigation = [
   //   element: <SignIn />,
   //   subLayout: 'none',
   // },
-  {
-    name: 'Slide',
-    path: '/slide',
-    element: <Slide />,
-    subLayout: 'none',
-  },
+  // {
+  //   name: 'Slide',
+  //   path: '/slide',
+  //   element: <Slide />,
+  //   subLayout: 'none',
+  // },
 ]
 
 export const userNavigation = [

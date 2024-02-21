@@ -9,10 +9,9 @@ export default function FlightPointMap() {
   const [editMode, setEditMode] = useState(false)
   const [selectPoint, setSelectPoint] = useState(null)
   const [selectMarker, setSelectMarker] = useState(null)
-
   const [openPointForm, setOpenPointForm] = useState(false)
 
-  const editAction = () => {
+  function editAction() {
     setEditMode(!editMode)
     editMode && setSelectPoint(null)
   }
@@ -41,7 +40,16 @@ export default function FlightPointMap() {
       </div>
 
       <div className='mx-auto max-w-7xl py-3'>
-        <MapBox editMode={editMode} selectPoint={selectPoint} setSelectPoint={setSelectPoint} selectMarker={selectMarker} setSelectMarker={setSelectMarker} setOpenPointForm={setOpenPointForm} />
+        <MapBox
+          editMode={editMode} //
+          setEditMode={setEditMode}
+          selectPoint={selectPoint}
+          setSelectPoint={setSelectPoint} //
+          selectMarker={selectMarker}
+          setSelectMarker={setSelectMarker} //
+          openPointForm={openPointForm}
+          setOpenPointForm={setOpenPointForm} //
+        />
       </div>
 
       <PointForm openPointForm={openPointForm} setOpenPointForm={setOpenPointForm}>

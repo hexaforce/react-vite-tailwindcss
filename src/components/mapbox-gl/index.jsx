@@ -5,12 +5,13 @@ import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/client'
 import { useAuth0 } from '@auth0/auth0-react'
 import { downloadFileFromS3, downloadFilesFromS3 } from '@/queries/FileUpload'
-import {  QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 
 import { ALL_FLIGHT_POINTS_QUERY } from '@/queries/FlightPoint'
 
 MapBox.propTypes = {
   editMode: PropTypes.bool.isRequired,
+  setEditMode: PropTypes.func.isRequired,
 
   selectPoint: PropTypes.shape({
     latitude: PropTypes.number.isRequired,
@@ -29,13 +30,14 @@ MapBox.propTypes = {
   }),
   setSelectMarker: PropTypes.func.isRequired,
 
+  openPointForm: PropTypes.bool.isRequired,
   setOpenPointForm: PropTypes.func.isRequired,
 }
 
-export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMarker, setSelectMarker, setOpenPointForm }) {
+export default function MapBox({ editMode, setEditMode, selectPoint, setSelectPoint, selectMarker, setSelectMarker, openPointForm, setOpenPointForm }) {
   const { getIdTokenClaims } = useAuth0()
 
-  const { loading, error, data } = useQuery(ALL_FLIGHT_POINTS_QUERY)
+  const { loading, error, data, refetch } = useQuery(ALL_FLIGHT_POINTS_QUERY)
   const [thumbnailImages, setThumbnailImages] = useState([])
   useEffect(() => {
     async function getThumbnailImages() {
@@ -71,6 +73,13 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
     getCurrentBlob()
   }, [getIdTokenClaims, selectMarker])
 
+  useEffect(() => {
+    if (openPointForm) return
+    setEditMode(false)
+    setSelectPoint(null)
+    refetch()
+  }, [openPointForm, setEditMode, setSelectPoint, refetch])
+
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
 
@@ -87,7 +96,6 @@ export default function MapBox({ editMode, selectPoint, setSelectPoint, selectMa
       // mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
       mapboxAccessToken='pk.eyJ1IjoicmVsaWNzOSIsImEiOiJjbHMzNHlwbDIwNDczMmtvM2xhNWR0ZzVtIn0.whCzeh6XW7ju4Ja6DR0imw'
       onClick={(event) => {
-
         // setSelectMarker(null)
         editMode &&
           setSelectPoint({
