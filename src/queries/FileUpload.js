@@ -41,26 +41,26 @@ const GET_POST_OBJECTS = gql`
     }
   }
 `
-  // const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
-  //   variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
-  //   skip: !submitClicked,
-  // })
+// const { loading, error, data, refetch } = useQuery(CREATE_PRESIGNED_REQUEST, {
+//   variables: { fileNames: names, command: 'PutObject', expires: '+2 minutes' },
+//   skip: !submitClicked,
+// })
 
-  // const [submitClicked, setSubmitClicked] = useState(false)
-  // const [names, setNames] = useState([])
-  // const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
-  //   variables: { names },
-  //   skip: !submitClicked,
-  // })
+// const [submitClicked, setSubmitClicked] = useState(false)
+// const [names, setNames] = useState([])
+// const { loading, error, data, refetch } = useQuery(GET_POST_OBJECTS, {
+//   variables: { names },
+//   skip: !submitClicked,
+// })
 
-  // useEffect(() => {
-  //   if (loading || !data) return
-  //   // Object.keys(files).map((objectURL) => {
-  //   //   const fileBlob = files[objectURL]
-  //   //   const presignedUrl = data.createPresignedRequest.find((result) => result.fileName === fileBlob.name).presignedUrl
-  //   //   uploadPresignedUrl(fileBlob, presignedUrl)
-  //   // })
-  // }, [loading, error, data, files])
+// useEffect(() => {
+//   if (loading || !data) return
+//   // Object.keys(files).map((objectURL) => {
+//   //   const fileBlob = files[objectURL]
+//   //   const presignedUrl = data.createPresignedRequest.find((result) => result.fileName === fileBlob.name).presignedUrl
+//   //   uploadPresignedUrl(fileBlob, presignedUrl)
+//   // })
+// }, [loading, error, data, files])
 
 const CREATE_PRESIGNED_REQUEST = gql`
   query CreatePresignedRequest($fileNames: [String!]!, $command: String!, $expires: String!) {
@@ -93,12 +93,35 @@ async function uploadPresignedUrl(token, fileBlob, presignUrl) {
   }
 }
 
-async function uploadFileToS3(token, bucket, fileBlob, thumbnail) {
+async function generatePoster(videoBlob) {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video')
+    video.onloadeddata = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+      canvas.toBlob((blob) => resolve(blob), 'image/jpeg')
+    }
+    video.onerror = (error) => {
+      reject(error)
+    }
+    video.src = URL.createObjectURL(videoBlob)
+    video.play()
+  })
+}
+
+async function uploadFileToS3(token, bucket, fileBlob, thumbnailType) {
   try {
     const wasabi = new FormData()
     wasabi.append('bucket', bucket)
     wasabi.append('file', fileBlob)
-    wasabi.append('thumbnail', thumbnail)
+    if (fileBlob.type.match('video.*')) {
+      const posterBlob = await generatePoster(fileBlob)
+      wasabi.append('poster', posterBlob)
+    }
+    wasabi.append('thumbnailType', thumbnailType)
     const response = await fetch('http://localhost:8001/api/wasabi', {
       method: 'POST',
       body: wasabi,
