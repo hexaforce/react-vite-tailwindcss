@@ -93,7 +93,7 @@ async function uploadPresignedUrl(token, fileBlob, presignUrl) {
   }
 }
 
-async function generatePoster(videoBlob) {
+async function getVideoOption(videoBlob) {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video')
     video.onloadeddata = () => {
@@ -102,7 +102,15 @@ async function generatePoster(videoBlob) {
       canvas.height = video.videoHeight
       const ctx = canvas.getContext('2d')
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-      canvas.toBlob((blob) => resolve(blob), 'image/jpeg')
+      canvas.toBlob((poster) => {
+        video.stop()
+        resolve({
+          poster,
+          duration: video.duration,
+          videoWidth: video.videoWidth,
+          videoHeight: video.videoHeight,
+        })
+      }, 'image/jpeg')
     }
     video.onerror = (error) => {
       reject(error)
@@ -112,15 +120,65 @@ async function generatePoster(videoBlob) {
   })
 }
 
+async function getAudioOption(AudioBlob) {
+  return new Promise((resolve, reject) => {
+    const Audio = document.createElement('Audio')
+    Audio.onloadeddata = () => {
+      resolve({
+        duration: Audio.duration,
+        volume: Audio.volume,
+      })
+    }
+    Audio.onerror = (error) => {
+      reject(error)
+    }
+    Audio.src = URL.createObjectURL(AudioBlob)
+  })
+}
+
+async function getImageOption(ImageBlob) {
+  return new Promise((resolve, reject) => {
+    const Image = document.createElement('img')
+    Image.onload = () => {
+      resolve({
+        imageWidth: Image.width,
+        imageHeight: Image.height,
+      })
+    }
+    Image.onerror = (error) => {
+      reject(error)
+    }
+    Image.src = URL.createObjectURL(ImageBlob)
+  })
+}
+
 async function uploadFileToS3(token, bucket, fileBlob, thumbnailType) {
   try {
     const wasabi = new FormData()
     wasabi.append('bucket', bucket)
     wasabi.append('file', fileBlob)
+
     if (fileBlob.type.match('video.*')) {
-      const posterBlob = await generatePoster(fileBlob)
-      wasabi.append('poster', posterBlob)
+      const videoOption = await getVideoOption(fileBlob)
+      wasabi.append('poster', videoOption.poster)
+      wasabi.append('duration', videoOption.duration)
+      wasabi.append('width', videoOption.videoWidth)
+      wasabi.append('height', videoOption.videoHeight)
     }
+
+    if (fileBlob.type.match('image.*')) {
+      const imageOption = await getImageOption(fileBlob)
+      wasabi.append('width', imageOption.imageWidth)
+      wasabi.append('height', imageOption.imageHeight)
+    }
+
+    if (fileBlob.type.match('audio.*')) {
+      const audioOption = await getAudioOption(fileBlob)
+      console.log(audioOption)
+      wasabi.append('duration', audioOption.duration)
+      wasabi.append('volume', audioOption.volume)
+    }
+
     wasabi.append('thumbnailType', thumbnailType)
     const response = await fetch('http://localhost:8001/api/wasabi', {
       method: 'POST',

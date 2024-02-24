@@ -53,11 +53,18 @@ export default function MediaLibrary() {
     })
   }
 
-  const cancelButtonRef = useRef(null)
-  // useEffect(() => {
-  //   console.log('openMediaPreview:', openMediaPreview)
-  // }, [openMediaPreview])
+  async function getMediaFile(wasabi_file_key) {
+    const token = (await getIdTokenClaims()).__raw
+    const target = await downloadFileFromS3(token, 'fpv-japan-public', wasabi_file_key, false)
+    if (target.fileBlob.type.match('image.*')) {
+      const imageSize = await getImageSize(target.fileBlob)
+      setWidthImage(imageSize.width > imageSize.height)
+    }
+    setMediaContent(target.fileBlob)
+    setOpenMediaPreview(true)
+  }
 
+  const cancelButtonRef = useRef(null)
   if (loading || loading2) return <Loading />
   if (error) return <div>Error: {error.message}</div>
 
@@ -78,23 +85,7 @@ export default function MediaLibrary() {
               <div className='mt-4 flex justify-between'>
                 <div>
                   <h3 className='text-sm text-gray-700'>
-                    <span
-                      aria-hidden='true'
-                      className='absolute inset-0'
-                      onClick={() => {
-                        async function getMediaFile(wasabi_file_key) {
-                          const token = (await getIdTokenClaims()).__raw
-                          const target = await downloadFileFromS3(token, 'fpv-japan-public', wasabi_file_key, false)
-                          const imageSize = await getImageSize(target.fileBlob)
-                          setWidthImage(imageSize.width > imageSize.height)
-                          setMediaContent(target.fileBlob)
-                          console.log('fileBlob:', target.fileBlob)
-                          setOpenMediaPreview(true)
-                        }
-                        getMediaFile(mediaLibrary.wasabi_file_key)
-                        console.log('onClick:', mediaLibrary)
-                      }}
-                    />
+                    <span aria-hidden='true' className='absolute inset-0' onClick={() => getMediaFile(mediaLibrary.wasabi_file_key)} />
                     {mediaLibrary.file_name}
                   </h3>
                   <p className='mt-1 text-sm text-gray-500'>{mediaLibrary.registered_at}</p>
@@ -106,7 +97,7 @@ export default function MediaLibrary() {
         </div>
       </div>
       <FileUpload openFileUpload={openFileUpload} setOpenFileUpload={setOpenFileUpload}>
-        <FileUploadForm setOpenFileUpload={setOpenFileUpload} refetch={refetch} />
+        <FileUploadForm setOpenFileUpload={setOpenFileUpload} loading={loading} refetch={refetch} />
       </FileUpload>
       <MediaPreview cancelButtonRef={cancelButtonRef} openMediaPreview={openMediaPreview} setOpenMediaPreview={setOpenMediaPreview} widthImage={widthImage}>
         <MediaContent cancelButtonRef={cancelButtonRef} openMediaPreview={openMediaPreview} setOpenMediaPreview={setOpenMediaPreview} mediaContent={mediaContent} />

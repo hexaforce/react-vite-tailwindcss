@@ -9,7 +9,7 @@ VideoTemplate.propTypes = {
 export function VideoTemplate({ objectURL, deleteFile }) {
   return (
     <article tabIndex='0' className='hasImage focus:shadow-outline group relative h-full w-full cursor-pointer rounded-md bg-gray-100 text-transparent shadow-sm hover:text-white focus:outline-none'>
-      <video src={URL.createObjectURL(objectURL)} alt={objectURL.name} className='img-preview sticky h-full w-full rounded-md bg-fixed object-cover' />
+      <video controls src={URL.createObjectURL(objectURL)} alt={objectURL.name} className='img-preview sticky h-full w-full rounded-md bg-fixed object-cover' />
       <section className='absolute top-0 z-20 flex h-full w-full flex-col break-words rounded-md px-3 py-2 text-xs'>
         <h1 className='flex-1'>{objectURL.name}</h1>
         <div className='flex'>

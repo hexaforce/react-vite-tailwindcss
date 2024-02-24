@@ -5,7 +5,7 @@ import Calendar from '@/components/fullcalendar'
 
 // import FileUpload2 from '@/views/FileUpload2'
 // import FileUpload from '@/views/FileUpload'
-// import Dialogs from '@/views/Dialogs'
+import Dialogs from '@/views/Dialogs'
 import MediaLibrary from '@/views/MediaLibrary'
 
 import FlightPointMap from '@/views/FlightPointMap'
@@ -51,12 +51,12 @@ export const navigation = [
     element: <Chat />,
     subLayout: subLayout,
   },
-  // {
-  //   name: 'Dialogs',
-  //   path: '/dialogs',
-  //   element: <Dialogs />,
-  //   subLayout: subLayout,
-  // },
+  {
+    name: 'Dialogs',
+    path: '/dialogs',
+    element: <Dialogs />,
+    subLayout: subLayout,
+  },
   // {
   //   name: 'Description',
   //   path: '/description',
@@ -76,7 +76,6 @@ export const navigation = [
   //   element: <Products />,
   //   subLayout: subLayout,
   // },
-
   // {
   //   name: 'Stacked',
   //   path: '/stacked',
