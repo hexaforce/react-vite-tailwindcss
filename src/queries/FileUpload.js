@@ -19,7 +19,7 @@ const LIST_OBJECTS = gql`
 `
 // const { loading, error, data } = useQuery(LIST_OBJECTS, {
 //   variables: {
-//     Name: 'fpv-japan-public',
+//     Name: import.meta.env.VITE_WASABI_BUCKET,
 //     Marker: 0,
 //     MaxKeys: 1000,
 //   },

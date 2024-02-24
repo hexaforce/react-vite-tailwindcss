@@ -69,7 +69,7 @@ async function upload(token, formData, createFlightPoint) {
     longitude: formData.longitude,
     title: formData.title,
   }
-  createFlightPointInput.marker_image = await uploadFileToS3(token, 'fpv-japan-public', formData.markerImage, imageOption.thumbnail)
+  createFlightPointInput.marker_image = await uploadFileToS3(token, import.meta.env.VITE_WASABI_BUCKET, formData.markerImage, imageOption.thumbnail)
   const response = await createFlightPoint({ variables: { createFlightPointInput } })
   console.log('response:', response.data)
 }

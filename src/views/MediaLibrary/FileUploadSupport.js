@@ -121,7 +121,7 @@ async function upload(token, files, createMediaLibrary, setOpenFileUpload, refet
       createMediaLibraryInput.file_height = videoOption.videoHeight
       createMediaLibraryInput.file_duration = videoOption.duration
       const imageOption = await getImageOption(videoOption.poster, 264, 164)
-      createMediaLibraryInput.wasabi_file_key = await uploadFileToS3(token, 'fpv-japan-public', fileBlob, imageOption.thumbnail)
+      createMediaLibraryInput.wasabi_file_key = await uploadFileToS3(token, import.meta.env.VITE_WASABI_BUCKET, fileBlob, imageOption.thumbnail)
       const response = await createMediaLibrary({ variables: { createMediaLibraryInput } })
       console.log('response:', response.data)
     }
@@ -129,14 +129,14 @@ async function upload(token, files, createMediaLibrary, setOpenFileUpload, refet
       const imageOption = await getImageOption(fileBlob, 264, 164)
       createMediaLibraryInput.file_width = imageOption.imageWidth
       createMediaLibraryInput.file_height = imageOption.imageHeight
-      createMediaLibraryInput.wasabi_file_key = await uploadFileToS3(token, 'fpv-japan-public', fileBlob, imageOption.thumbnail)
+      createMediaLibraryInput.wasabi_file_key = await uploadFileToS3(token, import.meta.env.VITE_WASABI_BUCKET, fileBlob, imageOption.thumbnail)
       const response = await createMediaLibrary({ variables: { createMediaLibraryInput } })
       console.log('response:', response.data)
     }
     if (fileBlob.type.match('audio.*')) {
       const audioOption = await getAudioOption(fileBlob)
       createMediaLibraryInput.file_duration = audioOption.duration
-      createMediaLibraryInput.wasabi_file_key = await uploadFileToS3(token, 'fpv-japan-public', fileBlob)
+      createMediaLibraryInput.wasabi_file_key = await uploadFileToS3(token, import.meta.env.VITE_WASABI_BUCKET, fileBlob)
       const response = await createMediaLibrary({ variables: { createMediaLibraryInput } })
       console.log('response:', response.data)
     }

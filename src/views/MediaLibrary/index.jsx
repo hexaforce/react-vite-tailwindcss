@@ -31,7 +31,7 @@ export default function MediaLibrary() {
       const token = (await getIdTokenClaims()).__raw
       const images = await downloadFilesFromS3(
         token,
-        'fpv-japan-public',
+        import.meta.env.VITE_WASABI_BUCKET,
         data?.allMediaLibraries.filter((m) => !m.file_type.match('audio.*')).map((m) => m.wasabi_file_key),
         true,
       )
@@ -68,7 +68,7 @@ export default function MediaLibrary() {
 
   async function getMediaFile(mediaLibrary) {
     const token = (await getIdTokenClaims()).__raw
-    const target = await downloadFileFromS3(token, 'fpv-japan-public', mediaLibrary.wasabi_file_key, false)
+    const target = await downloadFileFromS3(token, import.meta.env.VITE_WASABI_BUCKET, mediaLibrary.wasabi_file_key, false)
     // if (target.fileBlob.type.match('image.*')) {
     //   const imageSize = await getImageSize(target.fileBlob)
     //   setWidthImage(imageSize.width > imageSize.height)

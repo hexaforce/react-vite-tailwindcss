@@ -45,7 +45,7 @@ export default function MapBox({ editMode, setEditMode, selectPoint, setSelectPo
       const token = (await getIdTokenClaims()).__raw
       const images = await downloadFilesFromS3(
         token,
-        'fpv-japan-public',
+        import.meta.env.VITE_WASABI_BUCKET,
         data?.allFlightPoints.map((m) => m.marker_image),
         true,
       )
@@ -69,7 +69,7 @@ export default function MapBox({ editMode, setEditMode, selectPoint, setSelectPo
     if (!selectMarker) return
     async function getCurrentBlob() {
       const token = (await getIdTokenClaims()).__raw
-      const target = await downloadFileFromS3(token, 'fpv-japan-public', selectMarker.marker_image, false)
+      const target = await downloadFileFromS3(token, import.meta.env.VITE_WASABI_BUCKET, selectMarker.marker_image, false)
       setCurrentBlob(target.fileBlob)
     }
     getCurrentBlob()
