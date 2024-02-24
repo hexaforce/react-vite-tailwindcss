@@ -93,7 +93,7 @@ async function uploadFileToS3(token, bucket, fileBlob, thumbnail) {
     wasabi.append('bucket', bucket)
     wasabi.append('file', fileBlob)
     wasabi.append('thumbnail', thumbnail)
-    const response = await fetch('http://localhost:8001/api/wasabi', {
+    const response = await fetch(`${import.meta.env.VITE_REST_ENDPOINT}/wasabi`, {
       method: 'POST',
       body: wasabi,
       headers: { Authorization: `Bearer ${token}` },

@@ -180,7 +180,7 @@ async function uploadFileToS3(token, bucket, fileBlob, thumbnailType) {
     }
 
     wasabi.append('thumbnailType', thumbnailType)
-    const response = await fetch('http://localhost:8001/api/wasabi', {
+    const response = await fetch(`${import.meta.env.VITE_REST_ENDPOINT}/wasabi`, {
       method: 'POST',
       body: wasabi,
       headers: { Authorization: `Bearer ${token}` },
@@ -203,7 +203,7 @@ async function downloadFileFromS3(token, bucket, wasabi_file_key, thumbnail) {
     const wasabi = new FormData()
     wasabi.append('bucket', bucket)
     wasabi.append('fileKey', thumbnail ? `${wasabi_file_key}_thumbnail` : wasabi_file_key)
-    const response = await fetch('http://localhost:8001/api/wasabi2', {
+    const response = await fetch(`${import.meta.env.VITE_REST_ENDPOINT}/wasabi2`, {
       method: 'POST',
       body: wasabi,
       headers: { Authorization: `Bearer ${token}` },
