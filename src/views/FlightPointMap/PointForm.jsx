@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useMutation } from '@apollo/client'
 import { CREATE_FLIGHT_POINT_MUTATION } from '@/queries/FlightPoint'
-import { uploadFileToS3 } from '@/queries/FileUpload'
+import { upload } from '@/views/FlightPointMap/PointFormSupport'
 
 const initialFormValue = {
   latitude: 0.0,
@@ -25,11 +25,11 @@ PointFormInput.propTypes = {
 }
 
 export function PointFormInput({ setOpenPointForm, selectPoint }) {
-  const [formData, setFormData] = useState({...initialFormValue})
+  const [formData, setFormData] = useState({ ...initialFormValue })
 
   useEffect(() => {
     if (!selectPoint) return
-    setFormData(prevFormData => ({ ...prevFormData, ...selectPoint }));
+    setFormData((prevFormData) => ({ ...prevFormData, ...selectPoint }))
   }, [selectPoint])
 
   function inputChange(event) {
@@ -49,25 +49,9 @@ export function PointFormInput({ setOpenPointForm, selectPoint }) {
     event.preventDefault()
 
     const token = (await getIdTokenClaims()).__raw
-    const data = await uploadFileToS3(token, 'fpv-japan-public', formData.markerImage, 'map')
-    
-    const createFlightPointInput = {
-      latitude: formData.latitude,
-      longitude: formData.longitude,
-      title: formData.title,
-      marker_image: data.fileKey,
-    }
-
-    try {
-      createFlightPoint({ variables: { createFlightPointInput } })
-        .then(() => {
-          setOpenPointForm(false)
-          setFormData(initialFormValue)
-        })
-        .catch((error) => console.log('error:', error))
-    } catch (error) {
-      console.error(error.message)
-    }
+    upload(token, formData, createFlightPoint)
+    setOpenPointForm(false)
+    setFormData(initialFormValue)
   }
 
   return (
@@ -163,9 +147,7 @@ export default function PointForm({ children, openPointForm, setOpenPointForm })
                     <div className='px-4 sm:px-6'>
                       <Dialog.Title className='text-base font-semibold leading-6 text-gray-900'>マーカーを作成</Dialog.Title>
                     </div>
-                    <div className='relative mt-6 flex-1 px-4 sm:px-6'>
-                      {children}
-                    </div>
+                    <div className='relative mt-6 flex-1 px-4 sm:px-6'>{children}</div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

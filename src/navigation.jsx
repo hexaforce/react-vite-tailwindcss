@@ -51,12 +51,12 @@ export const navigation = [
     element: <Chat />,
     subLayout: subLayout,
   },
-  {
-    name: 'Dialogs',
-    path: '/dialogs',
-    element: <Dialogs />,
-    subLayout: subLayout,
-  },
+  // {
+  //   name: 'Dialogs',
+  //   path: '/dialogs',
+  //   element: <Dialogs />,
+  //   subLayout: subLayout,
+  // },
   // {
   //   name: 'Description',
   //   path: '/description',

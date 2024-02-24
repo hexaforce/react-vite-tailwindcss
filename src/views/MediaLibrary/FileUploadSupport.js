@@ -107,7 +107,6 @@ async function uploadFileToS3(token, bucket, fileBlob, thumbnail) {
 }
 
 async function upload(token, files, createMediaLibrary, setOpenFileUpload, refetch, setLoading) {
-  console.log("AAAAAAA")
   for (const objectURL of Object.keys(files)) {
     const fileBlob = files[objectURL]
     const createMediaLibraryInput = {
